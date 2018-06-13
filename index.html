@@ -26,13 +26,23 @@
     </header>
     <div class="container">
       <form action="#" name="book-search" class="book-search" accept-charset="utf-8">
-        <label for="search-book">Book: </label>
+        <!-- <label for="search-book">Book: </label>
         <input type="text" name="input-book" id="search-book">
         <label for="search-author">Author: </label>
         <input type="text" name="input-author" id="search-author">
         <label for="search-genre">Genre: </label>
         <input type="text" name="input-genre" id="search-genre">
-        <button type="submit">Look Up</button>
+        <button type="submit">Look Up</button> -->
+
+        <select id="searchField">
+          <option selected value="intitle">Book</option>
+          <option value="inauthor">Author</option>
+          <option value="isbn">Isbn</option>
+          <option value="subject">Subject</option>
+        </select>
+        <input id="textSearch" name="user-input" placeholder="Enter Search Here" />
+        <button type="submit" id="btnSearch" value="Search">Search</button>
+
       </form>
     </div>
     <main id="best-seller-titles">
@@ -45,6 +55,8 @@
       crossorigin="anonymous">
     </script>
     <script type="text/javascript" src="js/config.js"></script>
-    <script  src="js/main.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/nytimesArchive.js"></script>
+
   </body>
 </html>
