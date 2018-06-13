@@ -1,5 +1,5 @@
 const nytimesKey = config.NYT_KEY;
-const googleBooksKey = config.GOOGLE_BOOKS_KEY;
+// const googleBooksKey = config.GOOGLE_BOOKS_KEY;
 
 function initPage () {
   fetch(`https://api.nytimes.com/svc/books/v3/lists.json?list-name=hardcover-fiction&api-key=${nytimesKey}`, {
@@ -13,7 +13,7 @@ function initPage () {
       console.log(json);
     })
     .catch((error) => {
-      console.log('NYT API Error: Search not found');
+      console.log(`NYT API Error: Search not found: ${error}`);
     });
 }
 
@@ -48,7 +48,9 @@ function updateBestSellers (nytimesBestSellers) {
 }
 
 function updateCover (id, isbn) {
-  fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${googleBooksKey}`, {
+  // fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${googleBooksKey}`, {
+  // There's a rate limit of 1000 book search, and api key is only needed for user-specific info
+  fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`, {
     method: 'get'
   })
     .then((response) => {
