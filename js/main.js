@@ -1,8 +1,12 @@
+'use strict';
+
 const nytimesKey = config.NYT_KEY;
 // const googleBooksKey = config.GOOGLE_BOOKS_KEY;
+const NYT_BOOKS_ENDPOINT = 'https://api.nytimes.com/svc/books/v3/lists.json';
+const GOOGLE_BOOKS_ENDPOINT = 'https://www.googleapis.com/books/v1/volumes'
 
 function initPage () {
-  fetch(`https://api.nytimes.com/svc/books/v3/lists.json?list-name=hardcover-fiction&api-key=${nytimesKey}`, {
+  fetch(`${NYT_BOOKS_ENDPOINT}?list-name=hardcover-fiction&api-key=${nytimesKey}`, {
     method: 'get'
   })
     .then((response) => {
@@ -15,6 +19,37 @@ function initPage () {
     .catch((error) => {
       console.log(`NYT API Error: Search not found: ${error}`);
     });
+}
+
+function handleForm () {
+  const bookSearchForm = $('form[name=book-search');
+  const bookField = $('input[name=input-book]');
+  const authorField = $('input[name=input-author]');
+  const genreField = $('input[name=input-genre]');
+
+  bookSearchForm.on('submit', (e) => {
+    e.preventDefault();
+    // get user values inputted
+    const book = bookField.val();
+    const author = authorField.val();
+    const genre = genreField.val();
+
+    // pass along with Google endpoint
+    fetchBookData(GOOGLE_BOOKS_ENDPOINT, book, author, genre);
+
+    // reset the input
+    resetFields(bookField, authorField, genreField);
+  });
+}
+
+function fetchBookData (baseURL, book, author, genre) {
+  // make a url by concat endpoints together
+}
+
+function resetFields (books, author, genre) {
+  books.val('');
+  author.val('');
+  genre.val('');
 }
 
 function updateBestSellers (nytimesBestSellers) {
@@ -50,7 +85,7 @@ function updateBestSellers (nytimesBestSellers) {
 function updateCover (id, isbn) {
   // fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${googleBooksKey}`, {
   // There's a rate limit of 1000 book search, and api key is only needed for user-specific info
-  fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`, {
+  fetch(`${GOOGLE_BOOKS_ENDPOINT}?q=isbn:${isbn}`, {
     method: 'get'
   })
     .then((response) => {
