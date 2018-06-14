@@ -11,6 +11,10 @@ body {
   text-align: center;
 }
 
+main {
+  text-align: left;
+}
+
 .book-cover {
   display: block;
   margin: 0 auto;

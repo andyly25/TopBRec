@@ -11,6 +11,7 @@ const API_DATA = {
   googlebooks: null
 };
 
+// Starting off by initializing page with some of the popular fictions
 function initPage () {
   fetch(`${NYT_BOOKS_ENDPOINT}?&api-key=${nytimesKey}`, {
     method: 'get'
@@ -25,6 +26,7 @@ function initPage () {
     })
     .catch((error) => {
       // in the case of hitting the rate limit... we'll use an archive
+      // 1000 calls allowed only
       console.log(`NYT API Error: Search not found: ${error}`);
       updateBestSellers(nytimesArchive);
     });
@@ -73,8 +75,8 @@ function handleForm () {
 }
 
 function fetchBookData (option, searchTerm) {
-  // const googleApiUrl = `${GOOGLE_BOOKS_ENDPOINT}?q=${option}:${searchTerm}`;
-  // const tastediveApiUrl = `${TASTEDIVE_BOOKS_ENDPOINT}?q=${searchTerm}&type=books&info=1&limit=10&k=${tastediveKey}`;
+  const googleApiUrl = `${GOOGLE_BOOKS_ENDPOINT}?q=${option}:${searchTerm}`;
+  const tastediveApiUrl = `${TASTEDIVE_BOOKS_ENDPOINT}?q=${searchTerm}&type=books&info=1&limit=5&k=${tastediveKey}`;
   // make a url by concat endpoints together
   $('#best-seller-titles').append(`
     <p><a href="googleApiUrl">Testing: googleApiUrl</a></p>
@@ -115,19 +117,17 @@ function fetchBookData (option, searchTerm) {
   };
 
   // ajax call
-  $.when(
+  // adding in jsonp helped resolve No 'Access-Control-Allow-Origin'
     $.ajax({
       type: "GET",
       url: TASTEDIVE_BOOKS_ENDPOINT,
       jsonp: "callback",
       dataType: "jsonp",
       data: dataTastedive,
-
       success: function (data) {
         API_DATA.tastedive = data;
       }
-    })
-  ).then(() => {
+    }).then(() => {
     updateSearchItems(API_DATA.tastedive);
   });
 }
@@ -139,13 +139,29 @@ function getGoogleBookData () {
 function updateSearchItems (tastedive) {
   console.log(tastedive);
   console.log(tastedive.Similar);
-  console.log(tastediveKey.Similar);
+  console.log(tastedive.Similar.Info);
+  // Grabbing the information of the book
   tastedive.Similar.Info.forEach(function similarThings (searchItem) {
     const name = searchItem.Name;
     const description = searchItem.wTeaser;
+    const wikiUrl = searchItem.wUrl;
     $('#best-seller-titles').append(`
         <p>name of book is: ${name}</p>
         <p>description is: ${description}</p>
+        <p><a href="${wikiUrl}">Wikipedia Link</a></p>
+      `);
+  });
+
+  // Let's grab all of the recommendations for here
+  // this is a direct copy and paste... make a function later
+  tastedive.Similar.Results.forEach(function resultsRec (rec) {
+    const name = rec.Name;
+    const description = rec.wTeaser;
+    const wikiUrl = rec.wUrl;
+    $('#best-seller-titles').append(`
+        <p>name of book is: ${name}</p>
+        <p>description is: ${description}</p>
+        <p><a href="${wikiUrl}">Wikipedia Link</a></p>
       `);
   });
 }
@@ -157,7 +173,8 @@ function resetFields (userSearch) {
 
 function updateBestSellers (nytimesBestSellers) {
   nytimesBestSellers.results.books.forEach(function bestSellerBook (book) {
-    const isbn = book.isbns[0].isbn10;
+    // This isbn is unreliable when using with google api
+    // const isbn = book.isbns[0].isbn10;
     const lastWeekRank = book.rank_last_week || 'n/a';
     const weeksOnList = book.weeks_on_list || 'New this week!';
     const listing = `
