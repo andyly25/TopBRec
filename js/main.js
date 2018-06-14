@@ -6,6 +6,9 @@ const tastediveKey = config.TASTEDIVE_KEY;
 const NYT_BOOKS_ENDPOINT = 'https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json';
 const GOOGLE_BOOKS_ENDPOINT = 'https://www.googleapis.com/books/v1/volumes';
 const TASTEDIVE_BOOKS_ENDPOINT = 'https://tastedive.com/api/similar';
+const API_DATA = {
+  tastedive: null
+};
 
 function initPage () {
   fetch(`${NYT_BOOKS_ENDPOINT}?&api-key=${nytimesKey}`, {
@@ -15,14 +18,14 @@ function initPage () {
       return response.json();
     })
     .then((json) => {
-      // nytimesArchive = json;
+      nytimesArchive = json;
       updateBestSellers(json);
       console.log(json);
     })
     .catch((error) => {
       // in the case of hitting the rate limit... we'll use an archive
       console.log(`NYT API Error: Search not found: ${error}`);
-      // updateBestSellers(nytimesArchive);
+      updateBestSellers(nytimesArchive);
     });
 }
 
@@ -64,13 +67,60 @@ function handleForm () {
 
     // pass along with Google endpoint
     // fetchBookData(GOOGLE_BOOKS_ENDPOINT, book, author, genre);
-    fetchBookData(GOOGLE_BOOKS_ENDPOINT, option, userSearch);
+    fetchBookData(option, userSearch);
   });
 }
 
-function fetchBookData (baseURL, option, searchTerm) {
+function fetchBookData (option, searchTerm) {
+  const googleApiUrl = `${GOOGLE_BOOKS_ENDPOINT}?q=${option}:${searchTerm}`;
+  const tastediveApiUrl = `${TASTEDIVE_BOOKS_ENDPOINT}?q=${searchTerm}&type=books&info=1&limit=10&k=${tastediveKey}`;
   // make a url by concat endpoints together
-  $('#best-seller-titles').append(`<p>Testing: ${baseURL}?q=${option}:${searchTerm}</p>`);
+  $('#best-seller-titles').append(`
+    <p><a href="googleApiUrl">Testing: googleApiUrl</a></p>
+    <p><a href="tastediveKey">Testing: tastediveKey</a></p>
+    `);
+  // later convert based on ISBN to books for tastedive using google api if
+  // option is isbn
+
+  // Need to figure out how to get around CORS for tastedive
+  let dataTastedive = {
+    k: tastediveKey,
+    q: searchTerm,
+    type: 'books',
+    limit: 5,
+    info: 1
+  };
+
+  // ajax call
+  $.when(
+    $.ajax({
+      type: "GET",
+      url: TASTEDIVE_BOOKS_ENDPOINT,
+      jsonp: "callback",
+      dataType: "jsonp",
+      data: dataTastedive,
+
+      success: function (data) {
+        API_DATA.tastedive = data;
+      }
+    })
+  ).then(() => {
+    updateSearchItems(API_DATA.tastedive);
+  });
+}
+
+function updateSearchItems (tastedive) {
+  console.log(tastedive);
+  console.log(tastedive.Similar);
+  console.log(tastediveKey.Similar);
+  tastedive.Similar.Info.forEach(function similarThings (searchItem) {
+    const name = searchItem.Name;
+    const description = searchItem.wTeaser;
+    $('#best-seller-titles').append(`
+        <p>name of book is: ${name}</p>
+        <p>description is: ${description}</p>
+      `);
+  });
 }
 
 function resetFields (userSearch) {
