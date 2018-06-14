@@ -20,7 +20,7 @@ function initPage () {
       return response.json();
     })
     .then((json) => {
-      nytimesArchive = json;
+      // nytimesArchive = json;
       updateBestSellers(json);
       console.log(json);
     })
@@ -118,20 +118,21 @@ function fetchBookData (option, searchTerm) {
 
   // ajax call
   // adding in jsonp helped resolve No 'Access-Control-Allow-Origin'
-    $.ajax({
-      type: "GET",
-      url: TASTEDIVE_BOOKS_ENDPOINT,
-      jsonp: "callback",
-      dataType: "jsonp",
-      data: dataTastedive,
-      success: function (data) {
-        API_DATA.tastedive = data;
-      }
-    }).then(() => {
+  $.ajax({
+    type: 'GET',
+    url: TASTEDIVE_BOOKS_ENDPOINT,
+    jsonp: 'callback',
+    dataType: 'jsonp',
+    data: dataTastedive,
+    success: function (data) {
+      API_DATA.tastedive = data;
+    }
+  }).then(() => {
     updateSearchItems(API_DATA.tastedive);
   });
 }
 
+// Here we'll grab google book data to return relevant information for tastedive to use
 function getGoogleBookData () {
 
 }
