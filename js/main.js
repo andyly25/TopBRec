@@ -2,24 +2,27 @@
 
 const nytimesKey = config.NYT_KEY;
 // const googleBooksKey = config.GOOGLE_BOOKS_KEY;
-const NYT_BOOKS_ENDPOINT = 'https://api.nytimes.com/svc/books/v3/lists.json';
+const tastediveKey = config.TASTEDIVE_KEY;
+const NYT_BOOKS_ENDPOINT = 'https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json';
 const GOOGLE_BOOKS_ENDPOINT = 'https://www.googleapis.com/books/v1/volumes';
+const TASTEDIVE_BOOKS_ENDPOINT = 'https://tastedive.com/api/similar';
 
 function initPage () {
-  fetch(`${NYT_BOOKS_ENDPOINT}?list-name=hardcover-fiction&api-key=${nytimesKey}`, {
+  fetch(`${NYT_BOOKS_ENDPOINT}?&api-key=${nytimesKey}`, {
     method: 'get'
   })
     .then((response) => {
       return response.json();
     })
     .then((json) => {
+      // nytimesArchive = json;
       updateBestSellers(json);
       console.log(json);
     })
     .catch((error) => {
       // in the case of hitting the rate limit... we'll use an archive
       console.log(`NYT API Error: Search not found: ${error}`);
-      updateBestSellers(nytimesArchive);
+      // updateBestSellers(nytimesArchive);
     });
 }
 
@@ -38,6 +41,7 @@ function handleForm () {
   // const genreField = $('input[name=input-genre]');
   const searchInput = $('input[name=user-input');
   let option = $('#searchField').find('option:selected').val();
+  console.log(option);
   $('#searchField').change(function () {
     option = $(this).find('option:selected').val();
     console.log(option);
@@ -53,6 +57,7 @@ function handleForm () {
     userSearch = userSearch.replace(/\s+/g, '+').toLowerCase();
     // maybe append &max-results=20 at end
     console.log(`${GOOGLE_BOOKS_ENDPOINT}?q=${option}:${userSearch}`);
+    console.log(`${TASTEDIVE_BOOKS_ENDPOINT}?q=${userSearch}&type=books&info=1&limit=10&k=${tastediveKey}`);
 
     // reset the input
     resetFields(searchInput);
@@ -74,22 +79,21 @@ function resetFields (userSearch) {
 }
 
 function updateBestSellers (nytimesBestSellers) {
-  nytimesBestSellers.results.forEach(function bestSellerBook (book) {
-    const isbn = book.isbns[1].isbn10;
-    const bookInfo = book.book_details[0];
+  nytimesBestSellers.results.books.forEach(function bestSellerBook (book) {
+    const isbn = book.isbns[0].isbn10;
     const lastWeekRank = book.rank_last_week || 'n/a';
     const weeksOnList = book.weeks_on_list || 'New this week!';
     const listing = `
       <div id="${book.rank}" class="entry">
         <p>
-          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/387928/book%20placeholder.png" class="book-cover" id="cover-${book.rank}">
+          <img src="${book.book_image}" class="book-cover" id="cover-${book.rank}" alt="book: ${book.title}">
         </p>
         <h2>
-          <a href="${book.amazon_product_url}" target="_blank">${bookInfo.title}</a>
+          <a href="${book.amazon_product_url}" target="_blank">${book.title}</a>
         </h2>
-        <h4>By ${bookInfo.author}</h4>
-        <h4 class="publisher">Published by: ${bookInfo.publisher}</h4>
-        <p>${bookInfo.description}</p>
+        <h4>By ${book.author}</h4>
+        <h4 class="publisher">Published by: ${book.publisher}</h4>
+        <p>${book.description}</p>
         <div class="stats">
           <p>Last Week: ${lastWeekRank}</p>
           <p>Weeks on list: ${weeksOnList}</p>
@@ -99,32 +103,11 @@ function updateBestSellers (nytimesBestSellers) {
     $('#best-seller-titles').append(listing);
     $(`#${book.rank}`).attr('nyt-rank', book.rank);
 
-    updateCover(book.rank, isbn);
+    // updateCover(book.rank, isbn);
   });
-}
-
-function updateCover (id, isbn) {
-  // fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${googleBooksKey}`, {
-  // There's a rate limit of 1000 book search, and api key is only needed for user-specific info
-  fetch(`${GOOGLE_BOOKS_ENDPOINT}?q=isbn:${isbn}`, {
-    method: 'get'
-  })
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      let img = data.items[0].volumeInfo.imageLinks.thumbnail;
-      img = img.replace(/^http:\/\//i, 'https://');
-      $(`#cover-${id}`).attr('src', img);
-    })
-    .catch((error) => {
-      console.log(error);
-      console.log('Google API Error');
-    });
 }
 
 $(() => {
   initPage();
   handleForm();
 });
-

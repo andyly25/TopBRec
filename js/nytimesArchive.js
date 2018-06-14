@@ -1,6 +1,6 @@
 // While testing I reached API limit for this too, so we'll use some data
 // from https://api.nytimes.com/svc/books/v3/lists.json?list-name=hardcover-fiction&api-key=[your Api key]
-const nytimesArchive = {
+let nytimesArchive = {
   status: "OK",
   copyright: "Copyright (c) 2018 The New York Times Company. All Rights Reserved.",
   num_results: 15,
