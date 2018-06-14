@@ -7,7 +7,8 @@ const NYT_BOOKS_ENDPOINT = 'https://api.nytimes.com/svc/books/v3/lists/current/h
 const GOOGLE_BOOKS_ENDPOINT = 'https://www.googleapis.com/books/v1/volumes';
 const TASTEDIVE_BOOKS_ENDPOINT = 'https://tastedive.com/api/similar';
 const API_DATA = {
-  tastedive: null
+  tastedive: null,
+  googlebooks: null
 };
 
 function initPage () {
@@ -59,8 +60,8 @@ function handleForm () {
     let userSearch = searchInput.val();
     userSearch = userSearch.replace(/\s+/g, '+').toLowerCase();
     // maybe append &max-results=20 at end
-    console.log(`${GOOGLE_BOOKS_ENDPOINT}?q=${option}:${userSearch}`);
-    console.log(`${TASTEDIVE_BOOKS_ENDPOINT}?q=${userSearch}&type=books&info=1&limit=10&k=${tastediveKey}`);
+    // console.log(`${GOOGLE_BOOKS_ENDPOINT}?q=${option}:${userSearch}`);
+    // console.log(`${TASTEDIVE_BOOKS_ENDPOINT}?q=${userSearch}&type=books&info=1&limit=10&k=${tastediveKey}`);
 
     // reset the input
     resetFields(searchInput);
@@ -72,15 +73,37 @@ function handleForm () {
 }
 
 function fetchBookData (option, searchTerm) {
-  const googleApiUrl = `${GOOGLE_BOOKS_ENDPOINT}?q=${option}:${searchTerm}`;
-  const tastediveApiUrl = `${TASTEDIVE_BOOKS_ENDPOINT}?q=${searchTerm}&type=books&info=1&limit=10&k=${tastediveKey}`;
+  // const googleApiUrl = `${GOOGLE_BOOKS_ENDPOINT}?q=${option}:${searchTerm}`;
+  // const tastediveApiUrl = `${TASTEDIVE_BOOKS_ENDPOINT}?q=${searchTerm}&type=books&info=1&limit=10&k=${tastediveKey}`;
   // make a url by concat endpoints together
   $('#best-seller-titles').append(`
     <p><a href="googleApiUrl">Testing: googleApiUrl</a></p>
     <p><a href="tastediveKey">Testing: tastediveKey</a></p>
     `);
+
+  // we need to grab book data
+  const settings = {
+    url: GOOGLE_BOOKS_ENDPOINT,
+    data: {
+      q: `${option}:${searchTerm}`
+    },
+    dataType: 'json',
+    type: 'GET',
+    success: function (data) {
+      API_DATA.googlebooks = data;
+    }
+  };
+  $.ajax(settings)
+    .then(() => {
+      getGoogleBookData(API_DATA.googlebooks);
+      console.log(API_DATA.googlebooks);
+    });
+
   // later convert based on ISBN to books for tastedive using google api if
   // option is isbn
+  if (option === 'isbn') {
+    searchTerm = 'something from Google Api';
+  }
 
   // Need to figure out how to get around CORS for tastedive
   let dataTastedive = {
@@ -107,6 +130,10 @@ function fetchBookData (option, searchTerm) {
   ).then(() => {
     updateSearchItems(API_DATA.tastedive);
   });
+}
+
+function getGoogleBookData () {
+
 }
 
 function updateSearchItems (tastedive) {
