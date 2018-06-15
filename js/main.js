@@ -56,34 +56,42 @@ function handleForm () {
 }
 
 function fetchBookData (option, searchTerm) {
-  // we need to grab book data
-  // might not need success
-  const settings = {
-    url: GOOGLE_BOOKS_ENDPOINT,
-    data: {
-      q: `${option}:${searchTerm}`
-    },
-    dataType: 'json',
-    type: 'GET',
-    success: function (data) {
-      API_DATA.googlebook = data;
-      console.log('from google ajax');
-      console.log(data.items);
-    }
-  };
-  $.ajax(settings)
-    .then(() => {
-      getGoogleBookData(API_DATA.googlebook);
-      console.log('ajax googlebook list');
-      console.log(API_DATA.googlebook);
-    });
+  // LOL I might as well call googleAjax instead
+  googleAjax(option, searchTerm);
 
   // later convert based on ISBN to books for tastedive using google api if
   // option is isbn
-  if (option === 'isbn') {
-    searchTerm = 'something from Google Api';
-  }
+  // if (option === 'isbn') {
+  //   searchTerm = API_DATA.googlebookData.title;
+  //   // ERROR:  undefined...
+  // }
 
+  // // Need to figure out how to get around CORS for tastedive
+  // let dataTastedive = {
+  //   k: tastediveKey,
+  //   q: searchTerm,
+  //   type: 'books',
+  //   limit: 5,
+  //   info: 1
+  // };
+
+  // // ajax call
+  // // adding in jsonp helped resolve No 'Access-Control-Allow-Origin'
+  // $.ajax({
+  //   type: 'GET',
+  //   url: TASTEDIVE_BOOKS_ENDPOINT,
+  //   jsonp: 'callback',
+  //   dataType: 'jsonp',
+  //   data: dataTastedive,
+  //   success: function (data) {
+  //     API_DATA.tastedive = data;
+  //   }
+  // }).then(() => {
+  //   updateSearchItems(API_DATA.tastedive);
+  // });
+}
+
+function tastediveAjax (searchTerm) {
   // Need to figure out how to get around CORS for tastedive
   let dataTastedive = {
     k: tastediveKey,
@@ -107,6 +115,31 @@ function fetchBookData (option, searchTerm) {
   }).then(() => {
     updateSearchItems(API_DATA.tastedive);
   });
+}
+
+function googleAjax (option, searchTerm) {
+  // we need to grab book data
+  // might not need success
+  const settings = {
+    url: GOOGLE_BOOKS_ENDPOINT,
+    data: {
+      q: `${option}:${searchTerm}`
+    },
+    dataType: 'json',
+    type: 'GET',
+    success: function (data) {
+      API_DATA.googlebook = data;
+      console.log('from google ajax');
+      console.log(data.items);
+    }
+  };
+  $.ajax(settings)
+    .then(() => {
+      getGoogleBookData(API_DATA.googlebook);
+      console.log('ajax googlebook list');
+      console.log(API_DATA.googlebook);
+      tastediveAjax(API_DATA.googlebookData.title);
+    });
 }
 
 // Here we'll grab google book data to return relevant information for tastedive to use
