@@ -86,9 +86,9 @@ main {
   color: #333030;
 }
 
-#best-seller-titles .stats hr {
+/* #best-seller-titles .stats hr {
   opacity: .5;
-}
+} */
 
 #best-seller-titles .stats p {
   color: #282c37;

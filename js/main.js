@@ -11,6 +11,8 @@ const API_DATA = {
   googlebook: null,
   googlebookData: {}
 };
+// testing
+let count = 0;
 
 // Starting off by initializing page with some of the popular fictions
 function initPage () {
@@ -53,6 +55,36 @@ function handleForm () {
     // fetch data based on user input using google api and tastedive
     // fetchBookData(option, userSearch);
     googleAjax(option, userSearch);
+  });
+}
+
+function updateBestSellers (nytimesBestSellers) {
+  nytimesBestSellers.results.books.forEach(function bestSellerBook (book) {
+    // for testing
+    count = 0;
+    const lastWeekRank = book.rank_last_week || 'n/a';
+    const weeksOnList = book.weeks_on_list || 'New this week!';
+    const listing = `
+      <div id="${book.rank}" class="entry">
+        <p>
+          <img src="${book.book_image}" class="book-cover" id="cover-${book.rank}" alt="book: ${book.title}">
+        </p>
+        <h2>
+          <a href="${book.amazon_product_url}" target="_blank">${book.title}</a>
+        </h2>
+        <h4>By ${book.author}</h4>
+        <h4 class="publisher">Published by: ${book.publisher}</h4>
+        <p>${book.description}</p>
+        <div class="stats">
+          <p>Last Week: ${lastWeekRank}</p>
+          <p>Weeks on list: ${weeksOnList}</p>
+        </div>
+      </div>`;
+
+    $('#best-seller-titles').append(listing);
+    $(`#${book.rank}`).attr('nyt-rank', book.rank);
+
+    // updateCover(book.rank, isbn);
   });
 }
 
@@ -108,34 +140,11 @@ function googleAjax (option, searchTerm) {
   $.ajax(settings)
     .then(() => {
       getGoogleBookData(API_DATA.googlebook);
-      console.log('ajax googlebook list');
-      console.log(API_DATA.googlebook);
+      // console.log('ajax googlebook list');
+      // console.log(API_DATA.googlebook);
       tastediveAjax(API_DATA.googlebookData.title);
     });
 }
-
-// function tdGoogleAjax (searchTerm) {
-//   // we need to grab book data
-//   // might not need success
-//   const settings = {
-//     url: GOOGLE_BOOKS_ENDPOINT,
-//     data: {
-//       q: `intitle:${searchTerm}`
-//     },
-//     dataType: 'json',
-//     type: 'GET',
-//     success: function (data) {
-//       API_DATA.googlebook = data;
-//       console.log('from td google ajax');
-//       // console.log(data.items);
-//     }
-
-//   };
-//   $.ajax(settings)
-//     .then(() => {
-//       getGoogleBookData(API_DATA.googlebook);
-//     });
-// }
 
 // Here we'll grab google book data to return relevant information for tastedive to use
 function getGoogleBookData (data) {
@@ -167,14 +176,6 @@ function tastediveResults (searchItem) {
   // tdGoogleAjax(name);
   const description = searchItem.wTeaser;
   const wikiUrl = searchItem.wUrl;
-  // $('#best-seller-titles').append(`
-  //     <p>title: ${name}</p>
-  //     <p>
-  //       <img src="${API_DATA.googlebookData.thumbnail}" alt="book: ${name}">
-  //     </p>
-  //     <p>description: ${description}</p>
-  //     <p><a href="${wikiUrl}">Wikipedia Link</a></p>
-  // `);
   otherBooks(name, description, wikiUrl);
 }
 
@@ -187,6 +188,8 @@ function otherBooks (name, description, wikiUrl) {
       return response.json();
     })
     .then((data) => {
+      count += 1;
+      console.log(`The count is!..... ${count}`);
       // console.log(`SighhHHHHHHHHHH: ${data.items[0].volumeInfo.imageLinks.thumbnail}`);
       $('#best-seller-titles').append(` 
         <p>title: ${name}</p>
@@ -194,7 +197,7 @@ function otherBooks (name, description, wikiUrl) {
           <img src="${data.items[0].volumeInfo.imageLinks.thumbnail}" alt="book: ${name}">
         </p>
         <p>description: ${description}</p>
-        <p><a href="${wikiUrl}">Wikipedia Link</a></p>
+        <p><a href="${wikiUrl}" target="_blank">Wikipedia Link</a></p>
     `);
     })
     .catch((error) => {
@@ -208,36 +211,15 @@ function resetFields (userSearch) {
   $('#best-seller-titles').empty();
 }
 
-function updateBestSellers (nytimesBestSellers) {
-  nytimesBestSellers.results.books.forEach(function bestSellerBook (book) {
-    // This isbn is unreliable when using with google api
-    const lastWeekRank = book.rank_last_week || 'n/a';
-    const weeksOnList = book.weeks_on_list || 'New this week!';
-    const listing = `
-      <div id="${book.rank}" class="entry">
-        <p>
-          <img src="${book.book_image}" class="book-cover" id="cover-${book.rank}" alt="book: ${book.title}">
-        </p>
-        <h2>
-          <a href="${book.amazon_product_url}" target="_blank">${book.title}</a>
-        </h2>
-        <h4>By ${book.author}</h4>
-        <h4 class="publisher">Published by: ${book.publisher}</h4>
-        <p>${book.description}</p>
-        <div class="stats">
-          <p>Last Week: ${lastWeekRank}</p>
-          <p>Weeks on list: ${weeksOnList}</p>
-        </div>
-      </div>`;
-
-    $('#best-seller-titles').append(listing);
-    $(`#${book.rank}`).attr('nyt-rank', book.rank);
-
-    // updateCover(book.rank, isbn);
+function handleLogoPressed () {
+  $('header').on('click', '#nyt-logo', (event) => {
+    $('#best-seller-titles').empty();
+    initPage();
   });
 }
 
 $(() => {
   initPage();
   handleForm();
+  handleLogoPressed();
 });
