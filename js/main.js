@@ -51,49 +51,64 @@ function handleForm () {
     resetFields(searchInput);
 
     // fetch data based on user input using google api and tastedive
-    fetchBookData(option, userSearch);
+    // fetchBookData(option, userSearch);
+    googleAjax(option, userSearch);
   });
 }
 
-function fetchBookData (option, searchTerm) {
-  // LOL I might as well call googleAjax instead
-  googleAjax(option, searchTerm);
+// function fetchBookData (option, searchTerm) {
+//   // LOL I might as well call googleAjax instead
+//   googleAjax(option, searchTerm);
 
-  // later convert based on ISBN to books for tastedive using google api if
-  // option is isbn
-  // if (option === 'isbn') {
-  //   searchTerm = API_DATA.googlebookData.title;
-  //   // ERROR:  undefined...
-  // }
+//   // later convert based on ISBN to books for tastedive using google api if
+//   // option is isbn
+//   // if (option === 'isbn') {
+//   //   searchTerm = API_DATA.googlebookData.title;
+//   //   // ERROR:  undefined...
+//   // }
 
-  // // Need to figure out how to get around CORS for tastedive
-  // let dataTastedive = {
-  //   k: tastediveKey,
-  //   q: searchTerm,
-  //   type: 'books',
-  //   limit: 5,
-  //   info: 1
-  // };
+//   // // Need to figure out how to get around CORS for tastedive
+//   // let dataTastedive = {
+//   //   k: tastediveKey,
+//   //   q: searchTerm,
+//   //   type: 'books',
+//   //   limit: 5,
+//   //   info: 1
+//   // };
 
-  // // ajax call
-  // // adding in jsonp helped resolve No 'Access-Control-Allow-Origin'
-  // $.ajax({
-  //   type: 'GET',
-  //   url: TASTEDIVE_BOOKS_ENDPOINT,
-  //   jsonp: 'callback',
-  //   dataType: 'jsonp',
-  //   data: dataTastedive,
-  //   success: function (data) {
-  //     API_DATA.tastedive = data;
-  //   }
-  // }).then(() => {
-  //   updateSearchItems(API_DATA.tastedive);
-  // });
-}
+//   // // ajax call
+//   // // adding in jsonp helped resolve No 'Access-Control-Allow-Origin'
+//   // $.ajax({
+//   //   type: 'GET',
+//   //   url: TASTEDIVE_BOOKS_ENDPOINT,
+//   //   jsonp: 'callback',
+//   //   dataType: 'jsonp',
+//   //   data: dataTastedive,
+//   //   success: function (data) {
+//   //     API_DATA.tastedive = data;
+//   //   }
+//   // }).then(() => {
+//   //   updateSearchItems(API_DATA.tastedive);
+//   // });
+// }
+
+// function toTitleCase (str) {
+//   return str.replace(
+//     /\w\S*/g,
+//     function (txt) {
+//       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+//     }
+//   );
+// }
 
 function tastediveAjax (searchTerm) {
+  console.log(`testing to see if spaces in searchTerm messes things up ${searchTerm}`);
+  // for mulitple words, the spaces needs to turn into +
+  // const tasteSearchterm = searchTerm.replace(/\s+/g, '+').toLowerCase();
+  // const tasteSearch = toTitleCase(searchTerm);
+
   // Need to figure out how to get around CORS for tastedive
-  let dataTastedive = {
+  const dataTastedive = {
     k: tastediveKey,
     q: searchTerm,
     type: 'books',
@@ -111,6 +126,8 @@ function tastediveAjax (searchTerm) {
     data: dataTastedive,
     success: function (data) {
       API_DATA.tastedive = data;
+      console.log('ajax of TD');
+      console.log(API_DATA.tastedive);
     }
   }).then(() => {
     updateSearchItems(API_DATA.tastedive);
@@ -142,6 +159,31 @@ function googleAjax (option, searchTerm) {
     });
 }
 
+function tdGoogleAjax (searchTerm) {
+  // we need to grab book data
+  // might not need success
+  const settings = {
+    url: GOOGLE_BOOKS_ENDPOINT,
+    data: {
+      q: `intitle:${searchTerm}`
+    },
+    dataType: 'json',
+    type: 'GET',
+    success: function (data) {
+      API_DATA.googlebook = data;
+      console.log('from td google ajax');
+      // console.log(data.items);
+    }
+  };
+  $.ajax(settings)
+    .then(() => {
+      getGoogleBookData(API_DATA.googlebook);
+      // console.log('ajax googlebook list');
+      // console.log(API_DATA.googlebook);
+      // tastediveAjax(API_DATA.googlebookData.title);
+    });
+}
+
 // Here we'll grab google book data to return relevant information for tastedive to use
 function getGoogleBookData (data) {
   console.log('inside getgooglebookdata');
@@ -160,12 +202,14 @@ function updateSearchItems (tastedive) {
   // Let's grab all of the recommendations for here
   // this is a direct copy and paste... make a function later
   tastedive.Similar.Results.forEach(function resultsRec (rec) {
+    // Let's make a new data set for each individuals
     tastediveResults(rec);
   });
 }
 
 function tastediveResults (searchItem) {
   const name = searchItem.Name;
+  // tdGoogleAjax(name);
   const description = searchItem.wTeaser;
   const wikiUrl = searchItem.wUrl;
   $('#best-seller-titles').append(` 

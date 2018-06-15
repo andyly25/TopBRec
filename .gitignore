@@ -1,5 +1,6 @@
 # Let's make it so it won't push up our config file with api keys
-config.js
+# If I need project be on github pages, i need to have config on repository
+# config.js
 
 # Created by https://www.gitignore.io/api/macos
 
