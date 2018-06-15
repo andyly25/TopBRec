@@ -21,7 +21,6 @@ function initPage () {
       return response.json();
     })
     .then((json) => {
-      // nytimesArchive = json;
       updateBestSellers(json);
       console.log(json);
     })
@@ -35,9 +34,6 @@ function initPage () {
 
 function handleForm () {
   const bookSearchForm = $('form[name=book-search');
-  // const bookField = $('input[name=input-book]');
-  // const authorField = $('input[name=input-author]');
-  // const genreField = $('input[name=input-genre]');
   const searchInput = $('input[name=user-input');
   let option = $('#searchField').find('option:selected').val();
   console.log(option);
@@ -49,33 +45,17 @@ function handleForm () {
   bookSearchForm.on('submit', (e) => {
     e.preventDefault();
     // get user values inputted
-    // const book = bookField.val();
-    // const author = authorField.val();
-    // const genre = genreField.val();
     let userSearch = searchInput.val();
     userSearch = userSearch.replace(/\s+/g, '+').toLowerCase();
-    // maybe append &max-results=20 at end
-    // console.log(`${GOOGLE_BOOKS_ENDPOINT}?q=${option}:${userSearch}`);
-    // console.log(`${TASTEDIVE_BOOKS_ENDPOINT}?q=${userSearch}&type=books&info=1&limit=10&k=${tastediveKey}`);
-
     // reset the input
     resetFields(searchInput);
 
-    // pass along with Google endpoint
-    // fetchBookData(GOOGLE_BOOKS_ENDPOINT, book, author, genre);
+    // fetch data based on user input using google api and tastedive
     fetchBookData(option, userSearch);
   });
 }
 
 function fetchBookData (option, searchTerm) {
-  // const googleApiUrl = `${GOOGLE_BOOKS_ENDPOINT}?q=${option}:${searchTerm}`;
-  // const tastediveApiUrl = `${TASTEDIVE_BOOKS_ENDPOINT}?q=${searchTerm}&type=books&info=1&limit=5&k=${tastediveKey}`;
-  // make a url by concat endpoints together
-  // $('#best-seller-titles').append(`
-  //   <p><a href="${googleApiUrl}">Testing: googleApiUrl</a></p>
-  //   <p><a href="${tastediveApiUrl}">Testing: tastediveKey</a></p>
-  //   `);
-
   // we need to grab book data
   // might not need success
   const settings = {
@@ -94,6 +74,7 @@ function fetchBookData (option, searchTerm) {
   $.ajax(settings)
     .then(() => {
       getGoogleBookData(API_DATA.googlebook);
+      console.log('ajax googlebook list');
       console.log(API_DATA.googlebook);
     });
 
@@ -132,13 +113,6 @@ function fetchBookData (option, searchTerm) {
 function getGoogleBookData (data) {
   console.log('inside getgooglebookdata');
   console.log(data);
-  // data.items.forEach(function googleBookData (bookInfo) {
-  //   console.log('inside googleBookData function');
-  //   console.log(bookInfo);
-  //   API_DATA.googlebookData.title = bookInfo.volumeInfo.title;
-  //   API_DATA.googlebookData.thumbnail = bookInfo.volumeInfo.imageLinks.thumbnail;
-  //   API_DATA.googlebookData.previewLink = bookInfo.volumeInfo.previewLink;
-  // });
   API_DATA.googlebookData.title = data.items[0].volumeInfo.title;
   API_DATA.googlebookData.thumbnail = data.items[0].volumeInfo.imageLinks.thumbnail;
   API_DATA.googlebookData.previewLink = data.items[0].volumeInfo.previewLink;
@@ -147,35 +121,28 @@ function getGoogleBookData (data) {
 }
 
 function updateSearchItems (tastedive) {
-  console.log(tastedive);
-  console.log(tastedive.Similar);
-  console.log(tastedive.Similar.Info);
-  // Grabbing the information of the book
-  tastedive.Similar.Info.forEach(function similarThings (searchItem) {
-    const name = searchItem.Name;
-    const description = searchItem.wTeaser;
-    const wikiUrl = searchItem.wUrl;
-    $('#best-seller-titles').append(`
-        
-        <p>name of book is: ${name}</p>
-        <p>description is: ${description}</p>
-        <p><a href="${wikiUrl}">Wikipedia Link</a></p>
-      `);
-  });
+  const tastediveSimilar = tastedive.Similar.Info[0];
+  tastediveResults(tastediveSimilar);
 
   // Let's grab all of the recommendations for here
   // this is a direct copy and paste... make a function later
   tastedive.Similar.Results.forEach(function resultsRec (rec) {
-    const name = rec.Name;
-    const description = rec.wTeaser;
-    const wikiUrl = rec.wUrl;
-    $('#best-seller-titles').append(`
-
-        <p>name of book is: ${name}</p>
-        <p>description is: ${description}</p>
-        <p><a href="${wikiUrl}">Wikipedia Link</a></p>
-      `);
+    tastediveResults(rec);
   });
+}
+
+function tastediveResults (searchItem) {
+  const name = searchItem.Name;
+  const description = searchItem.wTeaser;
+  const wikiUrl = searchItem.wUrl;
+  $('#best-seller-titles').append(` 
+      <p>title: ${name}</p>
+      <p>
+        <img src="${API_DATA.googlebookData.thumbnail}" alt="book: ${name}">
+      </p>
+      <p>description: ${description}</p>
+      <p><a href="${wikiUrl}">Wikipedia Link</a></p>
+  `);
 }
 
 function resetFields (userSearch) {
@@ -186,7 +153,6 @@ function resetFields (userSearch) {
 function updateBestSellers (nytimesBestSellers) {
   nytimesBestSellers.results.books.forEach(function bestSellerBook (book) {
     // This isbn is unreliable when using with google api
-    // const isbn = book.isbns[0].isbn10;
     const lastWeekRank = book.rank_last_week || 'n/a';
     const weeksOnList = book.weeks_on_list || 'New this week!';
     const listing = `
