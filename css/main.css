@@ -11,6 +11,12 @@ body {
   text-align: center;
 }
 
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 main {
   text-align: left;
 }
@@ -92,6 +98,12 @@ main {
 
 #best-seller-titles .stats p {
   color: #282c37;
+}
+
+#nyt-logo:hover{
+  padding: 0 10px;
+  margin-right: 10px;
+  border: 1px solid black;
 }
 
 #masthead {

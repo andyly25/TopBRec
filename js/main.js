@@ -34,6 +34,7 @@ function initPage () {
     });
 }
 
+// This handles the user search form and after user types in their input
 function handleForm () {
   const bookSearchForm = $('form[name=book-search');
   const searchInput = $('input[name=user-input');
@@ -50,7 +51,7 @@ function handleForm () {
     let userSearch = searchInput.val();
     userSearch = userSearch.replace(/\s+/g, '+').toLowerCase();
     // reset the input
-    resetFields(searchInput);
+    resetSearchFields(searchInput);
 
     // fetch data based on user input using google api and tastedive
     // fetchBookData(option, userSearch);
@@ -58,6 +59,7 @@ function handleForm () {
   });
 }
 
+// updates the book listing on home page using nytimes
 function updateBestSellers (nytimesBestSellers) {
   nytimesBestSellers.results.books.forEach(function bestSellerBook (book) {
     // for testing
@@ -88,8 +90,42 @@ function updateBestSellers (nytimesBestSellers) {
   });
 }
 
+function googleAjax (option, searchTerm) {
+  // we need to grab book data
+  // might not need success
+  const settings = {
+    url: GOOGLE_BOOKS_ENDPOINT,
+    data: {
+      q: `${option}:${searchTerm}`
+    },
+    dataType: 'json',
+    type: 'GET',
+    success: function (data) {
+      API_DATA.googlebook = data;
+      // console.log('from google ajax');
+      // console.log(data.items);
+    }
+  };
+  $.ajax(settings)
+    .then(() => {
+      getGoogleBookData(API_DATA.googlebook);
+      // console.log('ajax googlebook list');
+      // console.log(API_DATA.googlebook);
+      tastediveAjax(API_DATA.googlebookData.title);
+    })
+    .catch((error) => {
+      // console.log(error);
+      showErr();
+    });
+}
+
+function showErr () {
+  $('#best-seller-titles').empty();
+  $('#best-seller-titles').append(`<p>Content not found. Did you mean to search by isbn?</p>`);
+}
+
 function tastediveAjax (searchTerm) {
-  console.log(`testing to see if spaces in searchTerm messes things up ${searchTerm}`);
+  // console.log(`testing to see if spaces in searchTerm messes things up ${searchTerm}`);
   // for mulitple words, the spaces needs to turn into +
   // const tasteSearchterm = searchTerm.replace(/\s+/g, '+').toLowerCase();
   // const tasteSearch = toTitleCase(searchTerm);
@@ -103,6 +139,8 @@ function tastediveAjax (searchTerm) {
     info: 1
   };
 
+  // Loading spinner here
+
   // ajax call
   // adding in jsonp helped resolve No 'Access-Control-Allow-Origin'
   $.ajax({
@@ -113,37 +151,12 @@ function tastediveAjax (searchTerm) {
     data: dataTastedive,
     success: function (data) {
       API_DATA.tastedive = data;
-      console.log('ajax of TD');
-      console.log(API_DATA.tastedive);
+      // console.log('ajax of TD');
+      // console.log(API_DATA.tastedive);
     }
   }).then(() => {
     updateSearchItems(API_DATA.tastedive);
   });
-}
-
-function googleAjax (option, searchTerm) {
-  // we need to grab book data
-  // might not need success
-  const settings = {
-    url: GOOGLE_BOOKS_ENDPOINT,
-    data: {
-      q: `${option}:${searchTerm}`
-    },
-    dataType: 'json',
-    type: 'GET',
-    success: function (data) {
-      API_DATA.googlebook = data;
-      console.log('from google ajax');
-      console.log(data.items);
-    }
-  };
-  $.ajax(settings)
-    .then(() => {
-      getGoogleBookData(API_DATA.googlebook);
-      // console.log('ajax googlebook list');
-      // console.log(API_DATA.googlebook);
-      tastediveAjax(API_DATA.googlebookData.title);
-    });
 }
 
 // Here we'll grab google book data to return relevant information for tastedive to use
@@ -153,64 +166,53 @@ function getGoogleBookData (data) {
   API_DATA.googlebookData.title = data.items[0].volumeInfo.title;
   API_DATA.googlebookData.thumbnail = data.items[0].volumeInfo.imageLinks.thumbnail;
   API_DATA.googlebookData.previewLink = data.items[0].volumeInfo.previewLink;
-  console.log('google book data');
-  console.log(API_DATA.googlebookData);
+  // console.log('google book data');
+  // console.log(API_DATA.googlebookData);
 }
 
 function updateSearchItems (tastedive) {
   const tastediveSimilar = tastedive.Similar.Info[0];
-  tastediveResults(tastediveSimilar);
-
-  // Let's grab all of the recommendations for here
-  // this is a direct copy and paste... make a function later
-  tastedive.Similar.Results.forEach(function resultsRec (rec) {
-    // console.log('WRECK IT RALPH');
-    // console.log(rec);
-    // Let's make a new data set for each individuals
-    tastediveResults(rec);
-  });
-}
-
-function tastediveResults (searchItem) {
-  const name = searchItem.Name;
-  // tdGoogleAjax(name);
-  const description = searchItem.wTeaser;
-  const wikiUrl = searchItem.wUrl;
-  otherBooks(name, description, wikiUrl);
-}
-
-function otherBooks (name, description, wikiUrl) {
-  fetch(`${GOOGLE_BOOKS_ENDPOINT}?q=intitle:${name}`, {
-    method: 'get'
-  })
-    .then((response) => {
-      console.log('response:' + response);
-      return response.json();
-    })
-    .then((data) => {
-      count += 1;
-      console.log(`The count is!..... ${count}`);
-      // console.log(`SighhHHHHHHHHHH: ${data.items[0].volumeInfo.imageLinks.thumbnail}`);
-      $('#best-seller-titles').append(` 
-        <p>title: ${name}</p>
+  // otherBooks(tastediveSimilar);
+  const arr = [tastediveSimilar, ...tastedive.Similar.Results];
+  // console.log(arr);
+  const promises = arr.map(otherBooks);
+  // console.log('something', promises);
+  Promise.all(promises)
+    .then (books => {
+      $('#best-seller-titles').html(books.map(book => { 
+        console.log('book', book);
+        return `
+        <p>title: ${book.Name}</p>
         <p>
-          <img src="${data.items[0].volumeInfo.imageLinks.thumbnail}" alt="book: ${name}">
+          <img src="${book.items[0].volumeInfo.imageLinks.thumbnail}" alt="book: ${book.Name}">
         </p>
-        <p>description: ${description}</p>
-        <p><a href="${wikiUrl}" target="_blank">Wikipedia Link</a></p>
-    `);
-    })
-    .catch((error) => {
-      console.log(error);
-      console.log('Google API Error');
+        <p>description: ${book.wTeaser}</p>
+        <p><a href="${book.wUrl}" target="_blank">Wikipedia Link</a></p>
+      `
+      }))
     });
 }
 
-function resetFields (userSearch) {
+function otherBooks (searchItem) {
+  return fetch(`${GOOGLE_BOOKS_ENDPOINT}?q=intitle:${searchItem.Name}`)
+    .then((response) => {
+      console.log('response from otherBooks!');
+      return response.json();
+    })
+    .then((data) => Object.assign(data, searchItem))
+    .catch((error) => {
+      console.log(error);
+      // console.log('Google API Error');
+    });
+}
+
+// reset search field
+function resetSearchFields (userSearch) {
   userSearch.val('');
   $('#best-seller-titles').empty();
 }
 
+// When user clicks logo, bring back the home page
 function handleLogoPressed () {
   $('header').on('click', '#nyt-logo', (event) => {
     $('#best-seller-titles').empty();
