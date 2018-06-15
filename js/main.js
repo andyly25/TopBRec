@@ -22,12 +22,12 @@ function initPage () {
     })
     .then((json) => {
       updateBestSellers(json);
-      console.log(json);
+      // console.log(json);
     })
     .catch((error) => {
       // in the case of hitting the rate limit... we'll use an archive
       // 1000 calls allowed only
-      console.log(`NYT API Error: Search not found: ${error}`);
+      // console.log(`NYT API Error: Search not found: ${error}`);
       updateBestSellers(nytimesArchive);
     });
 }
@@ -36,10 +36,10 @@ function handleForm () {
   const bookSearchForm = $('form[name=book-search');
   const searchInput = $('input[name=user-input');
   let option = $('#searchField').find('option:selected').val();
-  console.log(option);
+  // console.log(option);
   $('#searchField').change(function () {
     option = $(this).find('option:selected').val();
-    console.log(option);
+    // console.log(option);
   });
 
   bookSearchForm.on('submit', (e) => {
@@ -55,51 +55,6 @@ function handleForm () {
     googleAjax(option, userSearch);
   });
 }
-
-// function fetchBookData (option, searchTerm) {
-//   // LOL I might as well call googleAjax instead
-//   googleAjax(option, searchTerm);
-
-//   // later convert based on ISBN to books for tastedive using google api if
-//   // option is isbn
-//   // if (option === 'isbn') {
-//   //   searchTerm = API_DATA.googlebookData.title;
-//   //   // ERROR:  undefined...
-//   // }
-
-//   // // Need to figure out how to get around CORS for tastedive
-//   // let dataTastedive = {
-//   //   k: tastediveKey,
-//   //   q: searchTerm,
-//   //   type: 'books',
-//   //   limit: 5,
-//   //   info: 1
-//   // };
-
-//   // // ajax call
-//   // // adding in jsonp helped resolve No 'Access-Control-Allow-Origin'
-//   // $.ajax({
-//   //   type: 'GET',
-//   //   url: TASTEDIVE_BOOKS_ENDPOINT,
-//   //   jsonp: 'callback',
-//   //   dataType: 'jsonp',
-//   //   data: dataTastedive,
-//   //   success: function (data) {
-//   //     API_DATA.tastedive = data;
-//   //   }
-//   // }).then(() => {
-//   //   updateSearchItems(API_DATA.tastedive);
-//   // });
-// }
-
-// function toTitleCase (str) {
-//   return str.replace(
-//     /\w\S*/g,
-//     function (txt) {
-//       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-//     }
-//   );
-// }
 
 function tastediveAjax (searchTerm) {
   console.log(`testing to see if spaces in searchTerm messes things up ${searchTerm}`);
@@ -159,35 +114,33 @@ function googleAjax (option, searchTerm) {
     });
 }
 
-function tdGoogleAjax (searchTerm) {
-  // we need to grab book data
-  // might not need success
-  const settings = {
-    url: GOOGLE_BOOKS_ENDPOINT,
-    data: {
-      q: `intitle:${searchTerm}`
-    },
-    dataType: 'json',
-    type: 'GET',
-    success: function (data) {
-      API_DATA.googlebook = data;
-      console.log('from td google ajax');
-      // console.log(data.items);
-    }
-  };
-  $.ajax(settings)
-    .then(() => {
-      getGoogleBookData(API_DATA.googlebook);
-      // console.log('ajax googlebook list');
-      // console.log(API_DATA.googlebook);
-      // tastediveAjax(API_DATA.googlebookData.title);
-    });
-}
+// function tdGoogleAjax (searchTerm) {
+//   // we need to grab book data
+//   // might not need success
+//   const settings = {
+//     url: GOOGLE_BOOKS_ENDPOINT,
+//     data: {
+//       q: `intitle:${searchTerm}`
+//     },
+//     dataType: 'json',
+//     type: 'GET',
+//     success: function (data) {
+//       API_DATA.googlebook = data;
+//       console.log('from td google ajax');
+//       // console.log(data.items);
+//     }
+
+//   };
+//   $.ajax(settings)
+//     .then(() => {
+//       getGoogleBookData(API_DATA.googlebook);
+//     });
+// }
 
 // Here we'll grab google book data to return relevant information for tastedive to use
 function getGoogleBookData (data) {
-  console.log('inside getgooglebookdata');
-  console.log(data);
+  // console.log('inside getgooglebookdata');
+  // console.log(data);
   API_DATA.googlebookData.title = data.items[0].volumeInfo.title;
   API_DATA.googlebookData.thumbnail = data.items[0].volumeInfo.imageLinks.thumbnail;
   API_DATA.googlebookData.previewLink = data.items[0].volumeInfo.previewLink;
@@ -202,6 +155,8 @@ function updateSearchItems (tastedive) {
   // Let's grab all of the recommendations for here
   // this is a direct copy and paste... make a function later
   tastedive.Similar.Results.forEach(function resultsRec (rec) {
+    // console.log('WRECK IT RALPH');
+    // console.log(rec);
     // Let's make a new data set for each individuals
     tastediveResults(rec);
   });
@@ -212,14 +167,40 @@ function tastediveResults (searchItem) {
   // tdGoogleAjax(name);
   const description = searchItem.wTeaser;
   const wikiUrl = searchItem.wUrl;
-  $('#best-seller-titles').append(` 
-      <p>title: ${name}</p>
-      <p>
-        <img src="${API_DATA.googlebookData.thumbnail}" alt="book: ${name}">
-      </p>
-      <p>description: ${description}</p>
-      <p><a href="${wikiUrl}">Wikipedia Link</a></p>
-  `);
+  // $('#best-seller-titles').append(`
+  //     <p>title: ${name}</p>
+  //     <p>
+  //       <img src="${API_DATA.googlebookData.thumbnail}" alt="book: ${name}">
+  //     </p>
+  //     <p>description: ${description}</p>
+  //     <p><a href="${wikiUrl}">Wikipedia Link</a></p>
+  // `);
+  otherBooks(name, description, wikiUrl);
+}
+
+function otherBooks (name, description, wikiUrl) {
+  fetch(`${GOOGLE_BOOKS_ENDPOINT}?q=intitle:${name}`, {
+    method: 'get'
+  })
+    .then((response) => {
+      console.log('response:' + response);
+      return response.json();
+    })
+    .then((data) => {
+      // console.log(`SighhHHHHHHHHHH: ${data.items[0].volumeInfo.imageLinks.thumbnail}`);
+      $('#best-seller-titles').append(` 
+        <p>title: ${name}</p>
+        <p>
+          <img src="${data.items[0].volumeInfo.imageLinks.thumbnail}" alt="book: ${name}">
+        </p>
+        <p>description: ${description}</p>
+        <p><a href="${wikiUrl}">Wikipedia Link</a></p>
+    `);
+    })
+    .catch((error) => {
+      console.log(error);
+      console.log('Google API Error');
+    });
 }
 
 function resetFields (userSearch) {
