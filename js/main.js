@@ -8,7 +8,8 @@ const GOOGLE_BOOKS_ENDPOINT = 'https://www.googleapis.com/books/v1/volumes';
 const TASTEDIVE_BOOKS_ENDPOINT = 'https://tastedive.com/api/similar';
 const API_DATA = {
   tastedive: null,
-  googlebooks: null
+  googlebook: null,
+  googlebookData: {}
 };
 
 // Starting off by initializing page with some of the popular fictions
@@ -31,14 +32,6 @@ function initPage () {
       updateBestSellers(nytimesArchive);
     });
 }
-
-// $(document).ready(function () {
-//   let option = $('#searchField').find('option:selected').val();
-//   $('#searchField').change(function () {
-//     option = $(this).find('option:selected').val();
-//     console.log(option);
-//   });
-// });
 
 function handleForm () {
   const bookSearchForm = $('form[name=book-search');
@@ -75,15 +68,16 @@ function handleForm () {
 }
 
 function fetchBookData (option, searchTerm) {
-  const googleApiUrl = `${GOOGLE_BOOKS_ENDPOINT}?q=${option}:${searchTerm}`;
-  const tastediveApiUrl = `${TASTEDIVE_BOOKS_ENDPOINT}?q=${searchTerm}&type=books&info=1&limit=5&k=${tastediveKey}`;
+  // const googleApiUrl = `${GOOGLE_BOOKS_ENDPOINT}?q=${option}:${searchTerm}`;
+  // const tastediveApiUrl = `${TASTEDIVE_BOOKS_ENDPOINT}?q=${searchTerm}&type=books&info=1&limit=5&k=${tastediveKey}`;
   // make a url by concat endpoints together
-  $('#best-seller-titles').append(`
-    <p><a href="googleApiUrl">Testing: googleApiUrl</a></p>
-    <p><a href="tastediveKey">Testing: tastediveKey</a></p>
-    `);
+  // $('#best-seller-titles').append(`
+  //   <p><a href="${googleApiUrl}">Testing: googleApiUrl</a></p>
+  //   <p><a href="${tastediveApiUrl}">Testing: tastediveKey</a></p>
+  //   `);
 
   // we need to grab book data
+  // might not need success
   const settings = {
     url: GOOGLE_BOOKS_ENDPOINT,
     data: {
@@ -92,13 +86,15 @@ function fetchBookData (option, searchTerm) {
     dataType: 'json',
     type: 'GET',
     success: function (data) {
-      API_DATA.googlebooks = data;
+      API_DATA.googlebook = data;
+      console.log('from google ajax');
+      console.log(data.items);
     }
   };
   $.ajax(settings)
     .then(() => {
-      getGoogleBookData(API_DATA.googlebooks);
-      console.log(API_DATA.googlebooks);
+      getGoogleBookData(API_DATA.googlebook);
+      console.log(API_DATA.googlebook);
     });
 
   // later convert based on ISBN to books for tastedive using google api if
@@ -133,8 +129,21 @@ function fetchBookData (option, searchTerm) {
 }
 
 // Here we'll grab google book data to return relevant information for tastedive to use
-function getGoogleBookData () {
-
+function getGoogleBookData (data) {
+  console.log('inside getgooglebookdata');
+  console.log(data);
+  // data.items.forEach(function googleBookData (bookInfo) {
+  //   console.log('inside googleBookData function');
+  //   console.log(bookInfo);
+  //   API_DATA.googlebookData.title = bookInfo.volumeInfo.title;
+  //   API_DATA.googlebookData.thumbnail = bookInfo.volumeInfo.imageLinks.thumbnail;
+  //   API_DATA.googlebookData.previewLink = bookInfo.volumeInfo.previewLink;
+  // });
+  API_DATA.googlebookData.title = data.items[0].volumeInfo.title;
+  API_DATA.googlebookData.thumbnail = data.items[0].volumeInfo.imageLinks.thumbnail;
+  API_DATA.googlebookData.previewLink = data.items[0].volumeInfo.previewLink;
+  console.log('google book data');
+  console.log(API_DATA.googlebookData);
 }
 
 function updateSearchItems (tastedive) {
@@ -147,6 +156,7 @@ function updateSearchItems (tastedive) {
     const description = searchItem.wTeaser;
     const wikiUrl = searchItem.wUrl;
     $('#best-seller-titles').append(`
+        
         <p>name of book is: ${name}</p>
         <p>description is: ${description}</p>
         <p><a href="${wikiUrl}">Wikipedia Link</a></p>
@@ -160,6 +170,7 @@ function updateSearchItems (tastedive) {
     const description = rec.wTeaser;
     const wikiUrl = rec.wUrl;
     $('#best-seller-titles').append(`
+
         <p>name of book is: ${name}</p>
         <p>description is: ${description}</p>
         <p><a href="${wikiUrl}">Wikipedia Link</a></p>
