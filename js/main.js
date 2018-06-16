@@ -12,7 +12,7 @@ const API_DATA = {
   googlebookData: {}
 };
 // testing
-let count = 0;
+// let count = 0;
 
 // Starting off by initializing page with some of the popular fictions
 function initPage () {
@@ -29,7 +29,7 @@ function initPage () {
     .catch((error) => {
       // in the case of hitting the rate limit... we'll use an archive
       // 1000 calls allowed only
-      // console.log(`NYT API Error: Search not found: ${error}`);
+      console.log(`NYT API Error: Search not found: ${error}`);
       updateBestSellers(nytimesArchive);
     });
 }
@@ -100,11 +100,7 @@ function googleAjax (option, searchTerm) {
     },
     dataType: 'json',
     type: 'GET',
-    success: function (data) {
-      API_DATA.googlebook = data;
-      // console.log('from google ajax');
-      // console.log(data.items);
-    }
+    success: (data) => { API_DATA.googlebook = data; }
   };
   $.ajax(settings)
     .then(() => {
@@ -115,11 +111,12 @@ function googleAjax (option, searchTerm) {
     })
     .catch((error) => {
       // console.log(error);
-      showErr();
+      showErr(error);
     });
 }
 
-function showErr () {
+function showErr (error) {
+  console.log(error);
   $('#best-seller-titles').empty();
   $('#best-seller-titles').append(`<p>Content not found. Did you mean to search by isbn?</p>`);
 }
@@ -149,10 +146,8 @@ function tastediveAjax (searchTerm) {
     jsonp: 'callback',
     dataType: 'jsonp',
     data: dataTastedive,
-    success: function (data) {
+    success: (data) => {
       API_DATA.tastedive = data;
-      // console.log('ajax of TD');
-      // console.log(API_DATA.tastedive);
     }
   }).then(() => {
     updateSearchItems(API_DATA.tastedive);
@@ -178,8 +173,8 @@ function updateSearchItems (tastedive) {
   const promises = arr.map(otherBooks);
   // console.log('something', promises);
   Promise.all(promises)
-    .then (books => {
-      $('#best-seller-titles').html(books.map(book => { 
+    .then((books) => {
+      $('#best-seller-titles').html(books.map((book) => {
         console.log('book', book);
         return `
         <p>title: ${book.Name}</p>
@@ -188,8 +183,8 @@ function updateSearchItems (tastedive) {
         </p>
         <p>description: ${book.wTeaser}</p>
         <p><a href="${book.wUrl}" target="_blank">Wikipedia Link</a></p>
-      `
-      }))
+      `;
+      }));
     });
 }
 
@@ -199,7 +194,7 @@ function otherBooks (searchItem) {
       console.log('response from otherBooks!');
       return response.json();
     })
-    .then((data) => Object.assign(data, searchItem))
+    .then(data => Object.assign(data, searchItem))
     .catch((error) => {
       console.log(error);
       // console.log('Google API Error');
