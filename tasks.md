@@ -8,8 +8,15 @@
 - have a return to previous page button?
 - loading image?
 - styles
+- Might have to edit to have specific titles
+  - isbn is down
+  - maybe grab all info from google api
+  - tastedive only for recommendations
+  - should stay make lead to separate page for more info
+
 
 ## Bugs:
+- isbn is broken again
 - If Search term not found, display error
   - for both isbn and book
   - probably use alternative to find missing book image?

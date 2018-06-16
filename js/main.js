@@ -39,14 +39,14 @@ function handleForm () {
   const bookSearchForm = $('form[name=book-search');
   const searchInput = $('input[name=user-input');
   let option = $('#searchField').find('option:selected').val();
-  // console.log(option);
-  $('#searchField').change(function () {
+  $('#searchField').change(() => {
     option = $(this).find('option:selected').val();
-    // console.log(option);
   });
 
   bookSearchForm.on('submit', (e) => {
     e.preventDefault();
+    // reset count to 0
+    // count = 0;
     // get user values inputted
     let userSearch = searchInput.val();
     userSearch = userSearch.replace(/\s+/g, '+').toLowerCase();
@@ -62,8 +62,6 @@ function handleForm () {
 // updates the book listing on home page using nytimes
 function updateBestSellers (nytimesBestSellers) {
   nytimesBestSellers.results.books.forEach(function bestSellerBook (book) {
-    // for testing
-    count = 0;
     const lastWeekRank = book.rank_last_week || 'n/a';
     const weeksOnList = book.weeks_on_list || 'New this week!';
     const listing = `
@@ -100,7 +98,9 @@ function googleAjax (option, searchTerm) {
     },
     dataType: 'json',
     type: 'GET',
-    success: (data) => { API_DATA.googlebook = data; }
+    success: (data) => {
+      API_DATA.googlebook = data;
+    }
   };
   $.ajax(settings)
     .then(() => {
@@ -110,7 +110,6 @@ function googleAjax (option, searchTerm) {
       tastediveAjax(API_DATA.googlebookData.title);
     })
     .catch((error) => {
-      // console.log(error);
       showErr(error);
     });
 }
@@ -176,13 +175,22 @@ function updateSearchItems (tastedive) {
     .then((books) => {
       $('#best-seller-titles').html(books.map((book) => {
         console.log('book', book);
+        const bookData = book.items[0].volumeInfo;
         return `
-        <p>title: ${book.Name}</p>
-        <p>
-          <img src="${book.items[0].volumeInfo.imageLinks.thumbnail}" alt="book: ${book.Name}">
-        </p>
-        <p>description: ${book.wTeaser}</p>
-        <p><a href="${book.wUrl}" target="_blank">Wikipedia Link</a></p>
+        <div class="recommend-entry">
+          <p>
+            <a href="${bookData.previewLink}" target="_blank">
+              <img src="${bookData.imageLinks.thumbnail}" class="book-cover" alt="book: ${book.Name}">
+            </a>
+          </p>
+          <h2>
+            <a href="${bookData.previewLink}" target="_blank">${book.Name}</a>
+          </h2>
+          <h4>By ${bookData.authors[0]}</h4>
+          <h4 class="publisher">Published by: ${bookData.publisher}</h4>
+          <p>description: ${book.wTeaser}</p>
+          <p><a href="${book.wUrl}" target="_blank">Wikipedia Link</a></p>
+        </div>
       `;
       }));
     });
