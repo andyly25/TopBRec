@@ -105,12 +105,15 @@ function googleAjax (option, searchTerm) {
     dataType: 'json',
     type: 'GET',
     success: (data) => {
+      console.log('success', data);
       API_DATA.googlebook = data;
     }
   };
   $.ajax(settings)
     .then(() => {
       // ERROR: for ISBNs, I want to grab and store book title
+      // undefined TypeError: Cannot read property '0' of undefined
+      console.log('googleAjax then', API_DATA.googlebook);
       getGoogleBookData(API_DATA.googlebook);
       // console.log('ajax googlebook list');
       // console.log(API_DATA.googlebook);
@@ -171,7 +174,7 @@ function tastediveAjax (searchTerm) {
 // Here we'll grab google book data to return relevant information for tastedive to use
 function getGoogleBookData (data) {
   // console.log('inside getgooglebookdata');
-  // console.log('getGoogleBooks', data);
+  console.log('getGoogleBooks', data);
   API_DATA.googlebookData.title = data.items[0].volumeInfo.title;
   // API_DATA.googlebookData.thumbnail = data.items[0].volumeInfo.imageLinks.thumbnail;
   // API_DATA.googlebookData.previewLink = data.items[0].volumeInfo.previewLink;
