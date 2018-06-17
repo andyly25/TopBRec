@@ -34,6 +34,12 @@ function initPage () {
     });
 }
 
+function resetApiData () {
+  API_DATA.tastedive = null;
+  API_DATA.googlebook = null;
+  API_DATA.googlebookData = {};
+}
+
 // This handles the user search form and after user types in their input
 function handleForm () {
   const bookSearchForm = $('form[name=book-search');
@@ -104,6 +110,7 @@ function googleAjax (option, searchTerm) {
   };
   $.ajax(settings)
     .then(() => {
+      // ERROR: for ISBNs, I want to grab and store book title
       getGoogleBookData(API_DATA.googlebook);
       // console.log('ajax googlebook list');
       // console.log(API_DATA.googlebook);
@@ -136,6 +143,14 @@ function tastediveAjax (searchTerm) {
   };
 
   // Loading spinner here
+  // borrowed from https://ihatetomatoes.net/create-custom-preloading-screen/
+  $('#best-seller-titles').html(`
+      <div id="loader-wrapper">
+        <div id="loader"></div>
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+      </div>
+    `);
 
   // ajax call
   // adding in jsonp helped resolve No 'Access-Control-Allow-Origin'
@@ -156,10 +171,10 @@ function tastediveAjax (searchTerm) {
 // Here we'll grab google book data to return relevant information for tastedive to use
 function getGoogleBookData (data) {
   // console.log('inside getgooglebookdata');
-  // console.log(data);
+  // console.log('getGoogleBooks', data);
   API_DATA.googlebookData.title = data.items[0].volumeInfo.title;
-  API_DATA.googlebookData.thumbnail = data.items[0].volumeInfo.imageLinks.thumbnail;
-  API_DATA.googlebookData.previewLink = data.items[0].volumeInfo.previewLink;
+  // API_DATA.googlebookData.thumbnail = data.items[0].volumeInfo.imageLinks.thumbnail;
+  // API_DATA.googlebookData.previewLink = data.items[0].volumeInfo.previewLink;
   // console.log('google book data');
   // console.log(API_DATA.googlebookData);
 }
@@ -188,18 +203,20 @@ function updateSearchItems (tastedive) {
           </h2>
           <h4>By ${bookData.authors[0]}</h4>
           <h4 class="publisher">Published by: ${bookData.publisher}</h4>
-          <p>description: ${book.wTeaser}</p>
+          <p class="hidden-content book-desc">description: ${book.wTeaser}</p>
+          <input type="button" class="show-hide" value="Show">
           <p><a href="${book.wUrl}" target="_blank">Wikipedia Link</a></p>
         </div>
       `;
       }));
     });
+  $('#loader-wrapper').toggleClass('loaded');
 }
 
 function otherBooks (searchItem) {
   return fetch(`${GOOGLE_BOOKS_ENDPOINT}?q=intitle:${searchItem.Name}`)
     .then((response) => {
-      console.log('response from otherBooks!');
+      // console.log('response from otherBooks!', response);
       return response.json();
     })
     .then(data => Object.assign(data, searchItem))
@@ -222,6 +239,12 @@ function handleLogoPressed () {
     initPage();
   });
 }
+
+$(document).on('click', '.show-hide', () => {
+  $('.book-desc').toggleClass('hidden-content');
+  $('.show-hide').val($('.show-hide').val() === 'Show' ? 'Hide' : 'Show');
+  // console.log("hellow");
+});
 
 $(() => {
   initPage();

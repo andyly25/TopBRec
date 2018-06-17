@@ -16,7 +16,11 @@
 
 
 ## Bugs:
-- isbn is broken again
+- isbn is broken again,
+  - if enter an isbn in isbn section shows error page
+  - and if you switch to books and enter a real book
+    - page goes out of order again
+
 - If Search term not found, display error
   - for both isbn and book
   - probably use alternative to find missing book image?
