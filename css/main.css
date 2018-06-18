@@ -2,7 +2,6 @@
 @import url(https://fonts.googleapis.com/css?family=Rozha+One);
 * {
   box-sizing: border-box;
-  /* background-color: #fff; */
   font-family: 'Open Sans', sans-serif;
 }
 
@@ -20,7 +19,6 @@ main {
   display:  flex;
   flex-wrap: wrap;
   justify-content: center;
-  /* flex: 0 0 50%; */
 }
 
 .book-cover {

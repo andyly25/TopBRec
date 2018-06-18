@@ -79,9 +79,10 @@ function displayUserSearchResult (books) {
   $('#best-seller-titles').html(books.map((book) => {
     console.log('book', book);
     const bookData = book.items[0].volumeInfo;
+    const placeHolderImg = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/387928/book%20placeholder.png'
     const thumbnail = bookData.imageLinks !== undefined
       ? bookData.imageLinks.thumbnail
-      : '#';
+      : placeHolderImg;
     return `
     <div class="recommend-entry">
       <p>
