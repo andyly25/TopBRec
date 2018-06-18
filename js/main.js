@@ -10,7 +10,7 @@ const TASTEDIVE_BOOKS_ENDPOINT = 'https://tastedive.com/api/similar';
 const API_DATA = {
   tastedive: null,
   // googlebook: null,
-  googlebookData: []
+  // googlebookData: []
 };
 // testing
 // let count = 0;
@@ -154,33 +154,13 @@ function getGoogleApiData () {
     // end early if search term not found
     return undefined;
   }
-  const bookArray = createArrayTastedive();
-  console.log('google api data book array: ', bookArray);
-  // Clear out possible old results
-  API_DATA.googlebookData = [];
 
   // here we make an array to store promises
   // this will make sure we receive all data necessary before continuing on
-  // const promises = [];
   const infoArray = API_DATA.tastedive.Similar.Info[0];
   const arr = [infoArray, ...API_DATA.tastedive.Similar.Results];
   const promises = arr.map(getBookData);
   console.log('promises', promises);
-
-  // bookArray.forEach(function (book) {
-  //   const googleApiData = {
-  //     q: `intitle:${book}`,
-  //     maxResults: 1
-  //   };
-
-  //   // get json data for each book
-  //   const bookData = $.getJSON(GOOGLE_BOOKS_ENDPOINT, googleApiData, function (data) {
-  //     API_DATA.googlebookData.push(data);
-  //     console.log('push google book: ', data);
-  //   });
-  //   // now we start adding each bookData into our promise array to use in Promise.All
-  //   promises.push(bookData);
-  // });
 
   // When all promises are fulfilled we can finally start displaying search results
   Promise.all(promises)
@@ -192,7 +172,9 @@ function getGoogleApiData () {
 }
 
 function getBookData (searchTerm) {
-  return fetch(`${GOOGLE_BOOKS_ENDPOINT}?q=intitle:${searchTerm.Name}&maxResults=1`)
+  const correctSearchTerm = searchTerm.Name.replace(/\s+/g, '+');
+  console.log('correctSearchTerm: ', correctSearchTerm);
+  return fetch(`${GOOGLE_BOOKS_ENDPOINT}?q=intitle:${correctSearchTerm}&maxResults=1`)
     .then((response) => {
       // console.log('response from otherBooks!', response);
       return response.json();
@@ -204,22 +186,8 @@ function getBookData (searchTerm) {
     });
 }
 
-// #4 create an array of book titles
-function createArrayTastedive () {
-  // create an array
-  const bookArray = [];
-  const infoArray = API_DATA.tastedive.Similar.Info;
-  const resultsArray = API_DATA.tastedive.Similar.Results;
-  // use a forEach to go through each item in array and push in book Name
-  infoArray.forEach((book) => { bookArray.push(book.Name); });
-  resultsArray.forEach((book) => { bookArray.push(book.Name); });
-  // return the array of book names
-  console.log('createArrayTastedive array: ', bookArray);
-  return bookArray;
-}
-
 // #5 display the book results based on search term
-function displayUserSearchResult (books) { 
+function displayUserSearchResult (books) {
   $('#best-seller-titles').html(books.map((book) => {
     console.log('book', book);
     const bookData = book.items[0].volumeInfo;
@@ -263,6 +231,23 @@ $(document).on('click', '.show-hide', () => {
   // console.log("hellow");
 });
 
+// https://www.w3schools.com/howto/howto_js_scroll_to_top.asp
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = () => {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    document.getElementById('topBtn').style.display = 'block';
+  } else {
+    document.getElementById('topBtn').style.display = 'none';
+  }
+};
+
+// When the user clicks on the button, scroll to the top of the document
+$(document).on('click', '#topBtn', () => {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+});
+
+// This will run our functions
 $(() => {
   initPage();
   // handleForm();
