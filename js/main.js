@@ -149,6 +149,7 @@ function getGoogleApiData () {
       <div class="recommend-entry">
         <p>Sorry, results were not found for this search term<p/>
         <p>Please try another book title</p>
+        <input type="button" class="homeBtn" value="Return">
       </div>
     `);
     // end early if search term not found
@@ -225,6 +226,13 @@ function handleLogoPressed () {
   });
 }
 
+function handleHomeBtnPressed () {
+  $('#best-seller-titles').on('click', '.homeBtn', () => {
+    $('#best-seller-titles').empty();
+    initPage();
+  });
+}
+
 $(document).on('click', '.show-hide', () => {
   $('.book-desc').toggleClass('hidden-content');
   $('.show-hide').val($('.show-hide').val() === 'Show' ? 'Hide' : 'Show');
@@ -253,4 +261,5 @@ $(() => {
   // handleForm();
   handleSubmit();
   handleLogoPressed();
+  handleHomeBtnPressed();
 });
