@@ -17,6 +17,13 @@ const API_DATA = {
 
 // Starting off by initializing page with some of the popular fictions
 function initPage () {
+  $('#best-seller-titles').html(`
+    <div class="loader-wrapper">
+      <div class="loader"></div>
+      <div class="loader-section section-left"></div>
+      <div class="loader-section section-right"></div>
+    </div>
+  `);
   fetch(`${NYT_BOOKS_ENDPOINT}?&api-key=${nytimesKey}`, {
     method: 'get'
   })
@@ -37,6 +44,7 @@ function initPage () {
 
 // updates the book listing on home page using nytimes
 function updateBestSellers (nytimesBestSellers) {
+  $('#best-seller-titles').empty();
   nytimesBestSellers.results.books.forEach(function bestSellerBook (book) {
     const lastWeekRank = book.rank_last_week || 'n/a';
     const weeksOnList = book.weeks_on_list || 'New this week!';
@@ -90,14 +98,15 @@ function handleSubmit () {
     // Loading spinner here
     // borrowed from https://ihatetomatoes.net/create-custom-preloading-screen/
     $('#best-seller-titles').html(`
-      <div id="loader-wrapper">
-        <div id="loader"></div>
+      <div class="loader-wrapper">
+        <div class="loader"></div>
         <div class="loader-section section-left"></div>
         <div class="loader-section section-right"></div>
       </div>
     `);
     // fetch data based on user input using google api
     // we need to convert user input into a book title
+    console.log('submit search is: ', userSearch);
     getTastediveApiData(userSearch);
   });
 }
@@ -119,7 +128,7 @@ function getTastediveApiData (searchTerm) {
     $.ajax({
       type: 'GET',
       url: TASTEDIVE_BOOKS_ENDPOINT,
-      jsonp: 'callback', 
+      jsonp: 'callback',
       dataType: 'jsonp',
       data: dataTastedive,
       success: function (data) {
@@ -137,39 +146,61 @@ function getGoogleApiData () {
   // check to see if array is empty (no results found)
   if (resultsArrayTD.length === 0) {
     $('#best-seller-titles').html(`
-      <div class="search-error">
-        <p>Sorry, no results were found for this search term<p/>
+      <div class="recommend-entry">
+        <p>Sorry, results were not found for this search term<p/>
+        <p>Please try another book title</p>
       </div>
     `);
     // end early if search term not found
     return undefined;
   }
   const bookArray = createArrayTastedive();
+  console.log('google api data book array: ', bookArray);
   // Clear out possible old results
   API_DATA.googlebookData = [];
 
   // here we make an array to store promises
   // this will make sure we receive all data necessary before continuing on
-  const promises = [];
+  // const promises = [];
+  const infoArray = API_DATA.tastedive.Similar.Info[0];
+  const arr = [infoArray, ...API_DATA.tastedive.Similar.Results];
+  const promises = arr.map(getBookData);
+  console.log('promises', promises);
 
-  bookArray.forEach(function (book) {
-    const googleApiData = {
-      q: `intitle:${book}`,
-      maxResults: 1
-    };
+  // bookArray.forEach(function (book) {
+  //   const googleApiData = {
+  //     q: `intitle:${book}`,
+  //     maxResults: 1
+  //   };
 
-    // get json data for each book
-    const bookData = $.getJSON(GOOGLE_BOOKS_ENDPOINT, googleApiData, function (data) {
-      API_DATA.googlebookData.push(data);
-    });
-    // now we start adding each bookData into our promise array to use in Promise.All
-    promises.push(bookData);
-  });
+  //   // get json data for each book
+  //   const bookData = $.getJSON(GOOGLE_BOOKS_ENDPOINT, googleApiData, function (data) {
+  //     API_DATA.googlebookData.push(data);
+  //     console.log('push google book: ', data);
+  //   });
+  //   // now we start adding each bookData into our promise array to use in Promise.All
+  //   promises.push(bookData);
+  // });
 
   // When all promises are fulfilled we can finally start displaying search results
   Promise.all(promises)
-    .then(function () {
-      displayUserSearchResult();
+    .then(function (books) {
+      displayUserSearchResult(books);
+    });
+
+  $('.loader-wrapper').toggleClass('loaded');
+}
+
+function getBookData (searchTerm) {
+  return fetch(`${GOOGLE_BOOKS_ENDPOINT}?q=intitle:${searchTerm.Name}&maxResults=1`)
+    .then((response) => {
+      // console.log('response from otherBooks!', response);
+      return response.json();
+    })
+    .then(data => Object.assign(data, searchTerm))
+    .catch((error) => {
+      console.log(error);
+      // console.log('Google API Error');
     });
 }
 
@@ -183,50 +214,33 @@ function createArrayTastedive () {
   infoArray.forEach((book) => { bookArray.push(book.Name); });
   resultsArray.forEach((book) => { bookArray.push(book.Name); });
   // return the array of book names
+  console.log('createArrayTastedive array: ', bookArray);
   return bookArray;
 }
 
-function displayUserSearchResult () {
-  // empty string used to store all of the HTML
-  let htmlString = '';
-  const infoArray = API_DATA.tastedive.Similar.Info;
-  const infoResults = API_DATA.tastedive.Similar.Results;
-  // combining book info and results from tastedive api
-  // const combinedArray = [infoArray, ...API_DATA.tastedive.Similar.Results];
-  const combinedArray = infoArray.concat(infoResults);
-  // variables we'll grab from google api
-  let googleThumbnail;
-  let googleAuthor;
-  let googlePublisher;
-  let googlePreview;
-
-  for (let i = 0; i < combinedArray.length; i += 1) {
-    googleThumbnail = API_DATA.googlebookData[i].items[0].volumeInfo.imageLinks.thumbnail;
-    googleAuthor = API_DATA.googlebookData[i].items[0].volumeInfo.authors[0];
-    googlePublisher = API_DATA.googlebookData[i].items[0].volumeInfo.publisher;
-    googlePreview = API_DATA.googlebookData[i].items[0].volumeInfo.previewLink;
-
-    // currently all of google api is scrambled? will relook later
-    htmlString += `
-      <div class="recommend-entry">
-        <p>
-          <a href="${googlePreview}" target="_blank">
-            <img src="${googleThumbnail}" class="book-cover" alt="book: ${combinedArray[i].Name}">
-          </a>
-        </p>
-        <h2>
-          <a href="${googlePreview}" target="_blank">${combinedArray[i].Name}</a>
-        </h2>
-        <h4>By ${googleAuthor}</h4>
-        <h4 class="publisher">Published by: ${googlePublisher}</h4>
-        <p class="hidden-content book-desc">description: ${combinedArray[i].wTeaser}</p>
-        <input type="button" class="show-hide" value="Show">
-        <p><a href="${combinedArray[i].wUrl}" target="_blank">Wikipedia Link</a></p>
-      </div>
-    `;
-  }
-  // finally show users their results
-  $('#best-seller-titles').html(htmlString);
+// #5 display the book results based on search term
+function displayUserSearchResult (books) { 
+  $('#best-seller-titles').html(books.map((book) => {
+    console.log('book', book);
+    const bookData = book.items[0].volumeInfo;
+    return `
+    <div class="recommend-entry">
+      <p>
+        <a href="${bookData.previewLink}" target="_blank">
+          <img src="${bookData.imageLinks.thumbnail}" class="book-cover" alt="book: ${book.Name}">
+        </a>
+      </p>
+      <h2>
+        <a href="${bookData.previewLink}" target="_blank">${book.Name}</a>
+      </h2>
+      <h4>By ${bookData.authors[0]}</h4>
+      <h4 class="publisher">Published by: ${bookData.publisher}</h4>
+      <p class="hidden-content book-desc">description: ${book.wTeaser}</p>
+      <input type="button" class="show-hide" value="Show">
+      <p><a href="${book.wUrl}" target="_blank">Wikipedia Link</a></p>
+    </div>
+  `;
+  }));
 }
 
 // reset search field

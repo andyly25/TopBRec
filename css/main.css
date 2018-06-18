@@ -152,7 +152,7 @@ main {
    Loading screen from: https://ihatetomatoes.net/create-custom-preloading-screen/
    ========================================================================== */
 
-#loader-wrapper {
+.loader-wrapper {
   position: fixed;
   top: 0;
   left: 0;
@@ -161,7 +161,7 @@ main {
   z-index: 1000;
 }
 
-#loader {
+.loader {
   display: block;
   position: relative;
   left: 50%;
@@ -179,7 +179,7 @@ main {
   z-index: 1001;
 }
 
-#loader:before {
+.loader:before {
   content: "";
   position: absolute;
   top: 5px;
@@ -195,7 +195,7 @@ main {
   /* Chrome, Firefox 16+, IE 10+, Opera */
 }
 
-#loader:after {
+.loader:after {
   content: "";
   position: absolute;
   top: 15px;
@@ -249,7 +249,7 @@ main {
   }
 }
 
-#loader-wrapper .loader-section {
+.loader-wrapper .loader-section {
   position: fixed;
   top: 0;
   width: 51%;
@@ -264,18 +264,18 @@ main {
   /* Firefox 16+, IE 10+, Opera */
 }
 
-#loader-wrapper .loader-section.section-left {
+.loader-wrapper .loader-section.section-left {
   left: 0;
 }
 
-#loader-wrapper .loader-section.section-right {
+.loader-wrapper .loader-section.section-right {
   right: 0;
 }
 
 
 /* Loaded */
 
-.loaded #loader-wrapper .loader-section.section-left {
+.loaded .loader-wrapper .loader-section.section-left {
   -webkit-transform: translateX(-100%);
   /* Chrome, Opera 15+, Safari 3.1+ */
   -ms-transform: translateX(-100%);
@@ -286,7 +286,7 @@ main {
   transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
 }
 
-.loaded #loader-wrapper .loader-section.section-right {
+.loaded .loader-wrapper .loader-section.section-right {
   -webkit-transform: translateX(100%);
   /* Chrome, Opera 15+, Safari 3.1+ */
   -ms-transform: translateX(100%);
@@ -297,13 +297,13 @@ main {
   transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
 }
 
-.loaded #loader {
+.loaded .loader {
   opacity: 0;
   -webkit-transition: all 0.3s ease-out;
   transition: all 0.3s ease-out;
 }
 
-.loaded #loader-wrapper {
+.loaded .loader-wrapper {
   visibility: hidden;
   -webkit-transform: translateY(-100%);
   /* Chrome, Opera 15+, Safari 3.1+ */

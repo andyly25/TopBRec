@@ -16,17 +16,12 @@
 
 
 ## Bugs:
-- isbn is broken again,
-  - if enter an isbn in isbn section shows error page
-  - and if you switch to books and enter a real book
-    - page goes out of order again
-
+- If we enter in a book, for example: goose girl
+  - it gives mixed results
+  - wrong google book api search result
 - If Search term not found, display error
-  - for both isbn and book
-  - probably use alternative to find missing book image?
 - fix so each book has their own image
 - **fix book search images so that they are in the right order**
-- see if I can use getGoogleBookData(data) with otherBooks
 
 
 
