@@ -38,7 +38,7 @@ function getTastediveApiData (searchTerm) {
       jsonp: 'callback',
       dataType: 'jsonp',
       data: dataTastedive,
-      success: function (data) {
+      success: (data) => {
         API_DATA.tastedive = data;
         getGoogleApiData();
       }
@@ -77,12 +77,10 @@ function getBookData (searchTerm) {
   console.log('correctSearchTerm: ', correctSearchTerm);
   return fetch(`${GOOGLE_BOOKS_ENDPOINT}?q=intitle:${correctSearchTerm}&maxResults=1`)
     .then((response) => {
-      // console.log('response from otherBooks!', response);
       return response.json();
     })
     .then(data => Object.assign(data, searchTerm))
     .catch((error) => {
       console.log(error);
-      // console.log('Google API Error');
     });
 }
