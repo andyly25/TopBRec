@@ -6,4 +6,5 @@ $(() => {
   handleSubmit();
   handleLogoPressed();
   handleHomeBtnPressed();
+  handleShowHide();
 });

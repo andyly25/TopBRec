@@ -48,7 +48,7 @@ function createAboutInfo () {
       <section id="intro-jumbotron">
         <h2>Type in a book title and receive some book recommendations above.</h2>
         <h1>OR</h1>
-        <h2>View the latest New York Times fiction below!</h2>
+        <h2>View the top latest New York Times fiction below!</h2>
       </section>
     `);
 }

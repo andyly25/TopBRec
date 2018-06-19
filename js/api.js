@@ -68,6 +68,7 @@ function getGoogleApiData () {
       displayUserSearchResult(books);
     });
 
+  // toggle off load screen if done
   $('.loader-wrapper').toggleClass('loaded');
 }
 

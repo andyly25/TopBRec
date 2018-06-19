@@ -101,7 +101,8 @@ main {
 #intro-jumbotron {
   display: block;
   width: 80%;
-  border: 3px solid black;
+  /* border: 3px solid black; */
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.21);
 }
 
 #nyt-logo:hover {

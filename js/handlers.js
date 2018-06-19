@@ -35,11 +35,13 @@ function handleHomeBtnPressed () {
   });
 }
 
-$(document).on('click', '.show-hide', () => {
-  $('.book-desc').toggleClass('hidden-content');
-  $('.show-hide').val($('.show-hide').val() === 'Show' ? 'Hide' : 'Show');
-  // console.log("hellow");
-});
+function handleShowHide () {
+  // https://coderwall.com/p/wxjljq/jquery-find-and-closest-are-your-best-friends
+  $('main').on('click', '.show-hide', (event) => {
+    $(event.target).val($('.show-hide').val() === 'Show' ? 'Hide' : 'Show');
+    $(event.target).closest('.recommend-entry').find('.hidden-content').toggle('slow');
+  });
+}
 
 // https://www.w3schools.com/howto/howto_js_scroll_to_top.asp
 // When the user scrolls down 20px from the top of the document, show the button
