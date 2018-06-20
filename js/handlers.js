@@ -15,7 +15,7 @@ function handleSubmit () {
 
     // fetch data based on user input using google api
     // we need to convert user input into a book title
-    console.log('submit search is: ', userSearch);
+    // console.log('submit search is: ', userSearch);
     getTastediveApiData(userSearch);
   });
 }
@@ -38,7 +38,8 @@ function handleHomeBtnPressed () {
 function handleShowHide () {
   // https://coderwall.com/p/wxjljq/jquery-find-and-closest-are-your-best-friends
   $('main').on('click', '.show-hide', (event) => {
-    $(event.target).val($('.show-hide').val() === 'Show' ? 'Hide' : 'Show');
+    // console.log($(event.target).val());
+    $(event.target).val($(event.target).val() === 'Show' ? 'Hide' : 'Show');
     $(event.target).closest('.recommend-entry').find('.hidden-content').toggle('slow');
   });
 }

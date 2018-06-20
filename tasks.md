@@ -2,10 +2,12 @@
 
 ## Features a lot missing...
 - add event listeners! 
-- create image links lead to new view for just a page
+- ~~create image links lead to new view for just a page~~
+  - made it to lead to book preview
 - ~~make logo bring back to home page~~
-- make a return to top button
-- have a return to previous page button?
+- ~~make a return to top button~~
+- ~~have a return to previous page button?~~
+  - made it for if no search results
 - ~~loading image?~~
 - styles
 - Might have to edit to have specific titles
@@ -22,12 +24,13 @@
   - correct, but doesn't match with Tastedive
     - maybe use wiki api instead?...
     - check out here https://www.mediawiki.org/wiki/API:Main_page
-- If Search term not found, display error
+- ~~If Search term not found, display error~~
 - ~~fix so each book has their own image~~
 - ~~**fix book search images so that they are in the right order**~~
-- seems like google api if multiple words are separated by %20 by default gives
+- ~~seems like google api if multiple words are separated by %20 by default gives~~
   - entirely different results, changed to have + in between
-- if thumbnail does not exist, replace with temporary image
+- ~~if thumbnail does not exist, replace with temporary image~~
+- ~~show-hide button not applied for all others, fix it later~~
 
 ## useful
 - ... useful to know
