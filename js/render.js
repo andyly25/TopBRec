@@ -25,14 +25,13 @@ function updateBestSellers (nytimesBestSellers) {
         <p>
           <img src="${book.book_image}" class="book-cover" id="cover-${book.rank}" alt="book: ${book.title}">
         </p>
-        <h2>
-          <a href="${book.amazon_product_url}" target="_blank">${book.title}</a>
-        </h2>
+        <h2>${book.title}</h2>
         <h4>By ${book.author}</h4>
         <h4 class="publisher">Published by: ${book.publisher}</h4>
         <p>${book.description}</p>
+        <h3><a href="${book.amazon_product_url}" target="_blank">Amazon link</a></h3>
         <div class="stats">
-          <p>Last Week: ${lastWeekRank}</p>
+          <p>Last Week: Rank ${lastWeekRank} on list</p>
           <p>Weeks on list: ${weeksOnList}</p>
         </div>
       </div>`;
@@ -48,7 +47,7 @@ function createAboutInfo () {
       <section id="intro-jumbotron">
         <h2>Type in a book title and receive some book recommendations above.</h2>
         <h1>OR</h1>
-        <h2>View the top latest New York Times fiction below!</h2>
+        <h2>Pick your genre and view the top latest New York Times books below!</h2>
       </section>
     `);
 }
@@ -56,12 +55,12 @@ function createAboutInfo () {
 // borrowed from https://ihatetomatoes.net/create-custom-preloading-screen/
 function renderSpinner () {
   return $('#best-seller-titles').html(`
-            <div class="loader-wrapper">
-              <div class="loader"></div>
-              <div class="loader-section section-left"></div>
-              <div class="loader-section section-right"></div>
-            </div>
-          `);
+    <div class="loader-wrapper">
+      <div class="loader"></div>
+      <div class="loader-section section-left"></div>
+      <div class="loader-section section-right"></div>
+    </div>
+  `);
 }
 
 // use this later to replace error messages

@@ -27,19 +27,24 @@
     </header>
     <div class="container">
       <form action="#" name="book-search" class="book-search" accept-charset="utf-8">
-
-        <!-- borrowed idea from 
-          https://stackoverflow.com/questions/26528859/creating-a-text-and-dropdown-list-search-functionality -->
-        <select id="searchField">
-          <option selected value="intitle">Book</option>
-          <!-- <option value="inauthor">Author</option> -->
-          <!-- <option value="isbn">Isbn</option> -->
-          <!-- <option value="subject">Subject</option> -->
-        </select>
-        <input id="textSearch" name="user-input" placeholder="Enter Search Here" />
+        <span>Book Search:</span>
+        <input id="textSearch" name="user-input" placeholder="Enter Search Here" require/>
         <button type="submit" id="btnSearch" value="Search">Search</button>
-
       </form>
+      <!-- borrowed idea from 
+          https://stackoverflow.com/questions/26528859/creating-a-text-and-dropdown-list-search-functionality -->
+      <form action="#" id="genre-selection" name="genre-change">
+        <select id="select-genre">
+          <option selected value="hardcover-fiction">Top Fiction</option>
+          <option value="hardcover-nonfiction">Top Nonfiction</option>
+          <option value="young-adult-hardcover">Top Young-Adult</option>
+          <option value="business">Top Business</option>
+          <option value="sports">Top Sports and Fitness</option>
+          <option value="science">Top Science</option>
+        </select>
+        <button type="submit" id="btn-change-genre" value="Change Genre">Change Genre</button>
+      </form>
+
     </div>
     <main id="best-seller-titles">
       <!-- Where we place loading screen -->
@@ -54,8 +59,8 @@
     </script>
     <script type="text/javascript" src="js/config.js"></script>
     <script type="text/javascript" src="js/nytimesArchive.js"></script>
-    <script type="text/javascript" src="js/render.js"></script>
     <script type="text/javascript" src="js/store.js"></script>
+    <script type="text/javascript" src="js/render.js"></script>
     <script type="text/javascript" src="js/handlers.js"></script>
     <script type="text/javascript" src="js/api.js"></script>
     <script type="text/javascript" src="js/app.js"></script>

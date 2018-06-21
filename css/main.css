@@ -98,6 +98,13 @@ main {
   color: #282c37;
 }
 
+#genre-selection {
+  /* display: block; */
+  /* forces onto another line */
+  margin-top: 20px;
+  flex-basis: 100%;
+}
+
 #intro-jumbotron {
   display: block;
   width: 80%;

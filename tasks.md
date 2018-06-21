@@ -1,6 +1,6 @@
 # Tasks:
 
-## Features a lot missing...
+## Features to add
 - add event listeners! 
 - ~~create image links lead to new view for just a page~~
   - made it to lead to book preview
@@ -16,6 +16,7 @@
   - tastedive only for recommendations
   - should stay make lead to separate page for more info
 - Explain what the page is when someone lands on it
+- ACCESSIBILITY!
 
 ## Bugs:
 - If we enter in a book, for example: goose girl
@@ -54,3 +55,6 @@
 - change book preview to amazon page 
 - make links that says amazon if it leads to amazon
 - easy to use, no bugs
+- add more genres
+  - hardcover fiction (default), hardcover nonfiction, young adult hardcover
+    - some more: Business, science, sports and fitness

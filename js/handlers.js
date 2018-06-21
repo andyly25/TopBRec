@@ -20,6 +20,37 @@ function handleSubmit () {
   });
 }
 
+// function handleGenreChange () {
+//   const genreChangeForm = $('form[name=genre-change]');
+//   genre = $('#select-genre').find('option:selected').val();
+//   console.log(genre);
+//   $('#select-genre').change(() => {
+//     genre = $(this).find('option:selected').val();
+//   });
+//   console.log('Hellos');
+//   genreChangeForm.on('submit', (e) => {
+//     e.preventDefault();
+//     renderSpinner();
+//     initPage();
+//   });
+// }
+
+$(document).ready(function () {
+  $(document).on('change', '#select-genre', function () {
+    genre = $(this).find('option:selected').val();
+    console.log(genre);
+  });
+});
+
+function handleGenreChange () {
+  $('form[name=genre-change]').on('submit', function (e) {
+    e.preventDefault();
+    NYT_BOOKS_ENDPOINT = `https://api.nytimes.com/svc/books/v3/lists/current/${genre}.json`;
+    renderSpinner();
+    initPage();
+  });
+}
+
 // When user clicks logo, bring back the home page
 function handleLogoPressed () {
   $('header').on('click', '#nyt-logo', (event) => {
