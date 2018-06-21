@@ -14,7 +14,7 @@
   - isbn is down
   - maybe grab all info from google api
   - tastedive only for recommendations
-  - should stay make lead to separate page for more info
+  - should make lead to separate page for more info
 - Explain what the page is when someone lands on it
 - ACCESSIBILITY!
 
@@ -52,9 +52,11 @@
 - Your app is valuable for those who want to search for books when they can't find any recommendation. I probably won't use it though because nowadays people do really read books. Unless you expand the app a bit to give a broader genres or search application with keywords to help find what they are looking for.
 - make book recommendations, avoid same author, add more variety
 - book descriptions looks messy
+  - maybe separate by periods and a `<br>` per sentence?
 - change book preview to amazon page 
 - make links that says amazon if it leads to amazon
 - easy to use, no bugs
 - add more genres
   - hardcover fiction (default), hardcover nonfiction, young adult hardcover
     - some more: Business, science, sports and fitness
+- maybe add in number of search results as an option?

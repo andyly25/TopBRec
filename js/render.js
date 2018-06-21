@@ -67,7 +67,7 @@ function renderSpinner () {
 function errorMessage () {
   return $('#best-seller-titles').html(`
     <div class="recommend-entry">
-      <p>Sorry, results were not found for this search term<p/>
+      <p>Sorry, results were not found for this book using Tastedive api<p/>
       <p>Please try another book title</p>
       <input type="button" class="homeBtn" value="Return">
     </div>`);

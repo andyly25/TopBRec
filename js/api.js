@@ -25,7 +25,7 @@ function getTastediveApiData (searchTerm) {
     k: tastediveKey,
     q: searchTerm,
     type: 'books',
-    limit: 5,
+    limit: 10,
     info: 1
   };
 
