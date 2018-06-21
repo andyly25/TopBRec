@@ -31,7 +31,7 @@ function updateBestSellers (nytimesBestSellers) {
         <p>${book.description}</p>
         <h3><a href="${book.amazon_product_url}" target="_blank">Amazon link</a></h3>
         <div class="stats">
-          <p>Last Week: Rank ${lastWeekRank} on list</p>
+          <p>Last Week: rank ${lastWeekRank}</p>
           <p>Weeks on list: ${weeksOnList}</p>
         </div>
       </div>`;
