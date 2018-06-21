@@ -79,13 +79,15 @@ function displayUserSearchResult (books) {
     // console.log('book', book);
     const bookData = book.items[0].volumeInfo;
     console.log(bookData);
-    const placeHolderImg = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/387928/book%20placeholder.png'
+    const placeHolderImg = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/387928/book%20placeholder.png';
     const thumbnail = bookData.imageLinks !== undefined
       ? bookData.imageLinks.thumbnail
       : placeHolderImg;
     const author = bookData.hasOwnProperty('authors')
       ? bookData.authors[0]
       : 'N/A';
+    const description = book.wTeaser.split('. ').join('. <br/><br/>');
+    console.log(description);
 
     return `
     <div class="recommend-entry">
@@ -99,7 +101,7 @@ function displayUserSearchResult (books) {
       </h2>
       <h4>By ${author}</h4>
       <h4 class="publisher">Published by: ${bookData.publisher}</h4>
-      <p class="hidden-content book-desc">${book.wTeaser}</p>
+      <p class="hidden-content book-desc">${description}</p>
       <input type="button" class="show-hide" value="Show Description">
       <p><a href="${book.wUrl}" target="_blank">Wikipedia Link</a></p>
     </div>

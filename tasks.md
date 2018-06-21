@@ -60,3 +60,8 @@
   - hardcover fiction (default), hardcover nonfiction, young adult hardcover
     - some more: Business, science, sports and fitness
 - maybe add in number of search results as an option?
+
+
+- modal
+- change logo/or title font 
+- site description: a way to remove or get out of face
