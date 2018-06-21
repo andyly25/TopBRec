@@ -79,10 +79,15 @@ function displayUserSearchResult (books) {
   $('#best-seller-titles').html(books.map((book) => {
     // console.log('book', book);
     const bookData = book.items[0].volumeInfo;
+    console.log(bookData);
     const placeHolderImg = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/387928/book%20placeholder.png'
     const thumbnail = bookData.imageLinks !== undefined
       ? bookData.imageLinks.thumbnail
       : placeHolderImg;
+    const author = bookData.hasOwnProperty('authors')
+      ? bookData.authors[0]
+      : 'N/A';
+
     return `
     <div class="recommend-entry">
       <p>
@@ -93,7 +98,7 @@ function displayUserSearchResult (books) {
       <h2>
         <a href="${bookData.previewLink}" target="_blank">${book.Name}</a>
       </h2>
-      <h4>By ${bookData.authors[0]}</h4>
+      <h4>By ${author}</h4>
       <h4 class="publisher">Published by: ${bookData.publisher}</h4>
       <p class="hidden-content book-desc">description: ${book.wTeaser}</p>
       <input type="button" class="show-hide" value="Show">

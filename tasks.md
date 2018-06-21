@@ -31,13 +31,14 @@
   - entirely different results, changed to have + in between
 - ~~if thumbnail does not exist, replace with temporary image~~
 - ~~show-hide button not applied for all others, fix it later~~
+- should account for cases when certain terms not found
+  - example: author, imagelinks etc
 
 ## useful
 - ... useful to know
 - using promise.all?
 - Object.assign
+- play around with flex
 
-
-main have flex and wrap
-entry uses vw 
-play around with it later
+## feedback
+- include some way to show reviews/ratings to give users more of incentive to try out
