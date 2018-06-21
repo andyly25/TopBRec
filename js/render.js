@@ -100,8 +100,8 @@ function displayUserSearchResult (books) {
       </h2>
       <h4>By ${author}</h4>
       <h4 class="publisher">Published by: ${bookData.publisher}</h4>
-      <p class="hidden-content book-desc">description: ${book.wTeaser}</p>
-      <input type="button" class="show-hide" value="Show">
+      <p class="hidden-content book-desc">${book.wTeaser}</p>
+      <input type="button" class="show-hide" value="Show Description">
       <p><a href="${book.wUrl}" target="_blank">Wikipedia Link</a></p>
     </div>
   `;

@@ -40,5 +40,17 @@
 - Object.assign
 - play around with flex
 
+## feedback questions
+- Do my users think the app is interesting or valuable?
+- Did my users use the app as I intended?
+- Did my users encounter any bugs or broken features?
+- Did my users understand how to use the app?
+
 ## feedback
 - include some way to show reviews/ratings to give users more of incentive to try out
+- Your app is valuable for those who want to search for books when they can't find any recommendation. I probably won't use it though because nowadays people do really read books. Unless you expand the app a bit to give a broader genres or search application with keywords to help find what they are looking for.
+- make book recommendations, avoid same author, add more variety
+- book descriptions looks messy
+- change book preview to amazon page 
+- make links that says amazon if it leads to amazon
+- easy to use, no bugs

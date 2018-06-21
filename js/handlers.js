@@ -39,7 +39,7 @@ function handleShowHide () {
   // https://coderwall.com/p/wxjljq/jquery-find-and-closest-are-your-best-friends
   $('main').on('click', '.show-hide', (event) => {
     // console.log($(event.target).val());
-    $(event.target).val($(event.target).val() === 'Show' ? 'Hide' : 'Show');
+    $(event.target).val($(event.target).val() === 'Show Description' ? 'Hide Description' : 'Show Description');
     $(event.target).closest('.recommend-entry').find('.hidden-content').toggle('slow');
   });
 }
