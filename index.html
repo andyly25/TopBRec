@@ -22,14 +22,15 @@
     <link rel="stylesheet" type="text/css" href="css/main.css">
   </head>
   <body>
+    <!-- header that containing logo and site name -->
     <header id="masthead" role="banner">
       <img src="https://github.com/birisora/TopBRec/blob/master/favicon/android-chrome-512x512.png?raw=true" height="80" id="book-logo" alt="Website logo image">
       <span id="title">TopBRec</span>
     </header>
+    <!-- section for user book search or genre change -->
     <section class="container" role="region">
       <form action="#" name="book-search" class="book-search" accept-charset="utf-8">
         <label for='textSearch'>Book Search:</label>
-        <!-- name and id should match -->
         <input id="textSearch" name="user-input" placeholder="Enter Search Here" required/>
         <button type="submit" id="btnSearch" value="Search">Search</button>
       </form>
@@ -37,7 +38,7 @@
           https://stackoverflow.com/questions/26528859/creating-a-text-and-dropdown-list-search-functionality -->
       <form action="#" id="genre-selection" name="genre-change">
         <label for="select-genre">Select Genre:</label>
-        <select name="genre-selection" id="select-genre">
+        <select name="genre-selection" id="select-genre" aria-controls="genre-selection">
           <option selected value="hardcover-fiction">Top Fiction</option>
           <option value="hardcover-nonfiction">Top Nonfiction</option>
           <option value="young-adult-hardcover">Top Young-Adult</option>
@@ -47,19 +48,21 @@
         </select>
         <button type="submit" id="btn-change-genre" value="Change Genre">Change Genre</button>
       </form>
+      <!-- button to open up modal for instructions -->
       <button class="trigger" data-iziModal-open="#modal-one">How to use</button>
     </section>
-
-    <div id="modal-one" class="iziModal" data-izimodal-title="TopBRec Usage" data-izimodal-subtitle="Finding the right book!">
+    
+    <!-- a modal that appears if buton is pressed -->
+    <div id="modal-one" class="iziModal" data-izimodal-title="TopBRec Usage" data-izimodal-subtitle="Finding the right book!" aria-live="assertive" role="region">
       <h2>Type in a book title and receive some book recommendations above.</h2>
       <h1>OR</h1>
       <h2>Pick your genre and view the top latest New York Times books below!</h2>
       <h3>Escape or left or right arrow keys to leave instructions</h3>
     </div>
 
-    <main id="best-seller-titles" role="main">
+    <main id="best-seller-titles" role="main" aria-live="assertive">
       <!-- Where we place loading screen -->
-      <!-- best sellers -->
+      <!-- best sellers and books here-->
     </main>
     <button id="topBtn" title="Go to top">Top</button>
 

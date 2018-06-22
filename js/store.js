@@ -1,5 +1,4 @@
 const nytimesKey = config.NYT_KEY;
-// const googleBooksKey = config.GOOGLE_BOOKS_KEY;
 const tastediveKey = config.TASTEDIVE_KEY;
 // giving more options on home page with genre
 let genre = 'hardcover-fiction';

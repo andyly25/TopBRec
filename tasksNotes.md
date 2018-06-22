@@ -1,7 +1,7 @@
 # Tasks/Notes:
 
 ## Features to add
-- add event listeners! 
+- ~~add event listeners!~~
 - ~~create image links lead to new view for just a page~~
   - made it to lead to book preview
 - ~~make logo bring back to home page~~
@@ -10,12 +10,7 @@
   - made it for if no search results
 - ~~loading image?~~
 - styles
-- Might have to edit to have specific titles
-  - isbn is down
-  - maybe grab all info from google api
-  - tastedive only for recommendations
-  - should make lead to separate page for more info
-- Explain what the page is when someone lands on it
+- ~~Explain what the page is when someone lands on it~~
 - ACCESSIBILITY!
 - ~~site description: a way to remove or get out of face~~
   - ~~modal~~
@@ -31,7 +26,7 @@
 - ~~show-hide button not applied for all others, fix it later~~
 
 ## useful
-- ... useful to know
+- `...` useful to know
 - using promise.all?
 - Object.assign
 - play around with flex
@@ -47,8 +42,8 @@
 - Your app is valuable for those who want to search for books when they can't find any recommendation. I probably won't use it though because nowadays people do really read books. Unless you expand the app a bit to give a broader genres or search application with keywords to help find what they are looking for.
 - make book recommendations, avoid same author, add more variety
 - book descriptions looks messy
-  - maybe separate by periods and a `<br>` per sentence?
-- change book preview to amazon page 
+  - maybe separate by periods and space with a `<br>` per sentence?
+- change book preview to amazon page maybe
 - make links that says amazon if it leads to amazon
 - easy to use, no bugs
 - add more genres

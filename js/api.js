@@ -8,7 +8,6 @@ function getNytApiData () {
     })
     .then((json) => {
       updateBestSellers(json);
-      // console.log(json);
     })
     .catch((error) => {
       // in the case of hitting the rate limit... we'll use an archive
@@ -60,7 +59,6 @@ function getGoogleApiData () {
   const infoArray = API_DATA.tastedive.Similar.Info[0];
   const arr = [infoArray, ...API_DATA.tastedive.Similar.Results];
   const promises = arr.map(getBookData);
-  // console.log('promises', promises);
 
   // When all promises are fulfilled we can finally start displaying search results
   Promise.all(promises)
@@ -74,7 +72,6 @@ function getGoogleApiData () {
 
 function getBookData (searchTerm) {
   const correctSearchTerm = searchTerm.Name.replace(/\s+/g, '+');
-  // console.log('correctSearchTerm: ', correctSearchTerm);
   return fetch(`${GOOGLE_BOOKS_ENDPOINT}?q=intitle:${correctSearchTerm}&maxResults=1`)
     .then((response) => {
       return response.json();
