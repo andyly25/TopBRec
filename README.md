@@ -1,5 +1,6 @@
 # TopBRec
-As a user I want to be able to browse the latest popular books or search up recommendations for myself. 
+- Top Book Recommendation site
+- As a user I want to be able to browse the latest popular books or search up recommendations for myself. 
 
 ## Getting Started
 The site is located at my repositiory for: [TopBRec](https://birisora.github.io/TopBRec/ "Andy Ly TopBRec repository")
