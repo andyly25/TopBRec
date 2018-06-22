@@ -31,10 +31,10 @@ function updateBestSellers (nytimesBestSellers) {
           <img src="${book.book_image}" class="book-cover" id="cover-${book.rank}" alt="book: ${book.title}">
         </p>
         <h2>${book.title}</h2>
-        <h4>By ${book.author}</h4>
+        <h3>By ${book.author}</h3>
         <h4 class="publisher">Published by: ${book.publisher}</h4>
         <p>${book.description}</p>
-        <h3><a href="${book.amazon_product_url}" target="_blank">Amazon link</a></h3>
+        <h4><a href="${book.amazon_product_url}" target="_blank">Amazon link</a></h4>
         <div class="stats">
           <p>Last Week: rank ${lastWeekRank}</p>
           <p>Weeks on list: ${weeksOnList}</p>
@@ -45,17 +45,6 @@ function updateBestSellers (nytimesBestSellers) {
     $(`#${book.rank}`).attr('nyt-rank', book.rank);
   });
 }
-
-// // Create intro to page so users will know what the site is about
-// function createAboutInfo () {
-//   $('#best-seller-titles').html(`
-//       <section id="intro-jumbotron">
-//         <h2>Type in a book title and receive some book recommendations above.</h2>
-//         <h1>OR</h1>
-//         <h2>Pick your genre and view the top latest New York Times books below!</h2>
-//       </section>
-//     `);
-// }
 
 // borrowed from https://ihatetomatoes.net/create-custom-preloading-screen/
 function renderSpinner () {
@@ -74,7 +63,8 @@ function errorMessage () {
     <div class="recommend-entry">
       <p>Sorry, results were not found for this book using Tastedive api<p/>
       <p>Please try another book title</p>
-      <input type="button" class="homeBtn" value="Return">
+      <label for="return-home"></label>
+      <input id="return-home" type="button" class="homeBtn" value="Return">
     </div>`);
 }
 
@@ -107,7 +97,8 @@ function displayUserSearchResult (books) {
       <h4>By ${author}</h4>
       <h4 class="publisher">Published by: ${bookData.publisher}</h4>
       <p class="hidden-content book-desc">${description}</p>
-      <input type="button" class="show-hide" value="Show Description">
+      <label for="show-hide-btn"></label>
+      <input type="button" id="show-hide-btn" class="show-hide" value="Show Description">
       <p><a href="${book.wUrl}" target="_blank">Wikipedia Link</a></p>
     </div>
   `;

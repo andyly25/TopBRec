@@ -22,13 +22,13 @@
     <link rel="stylesheet" type="text/css" href="css/main.css">
   </head>
   <body>
-    <header id="masthead">
+    <header id="masthead" role="banner">
       <img src="https://github.com/birisora/TopBRec/blob/master/favicon/android-chrome-512x512.png?raw=true" height="80" id="book-logo" alt="Website logo image">
       <span id="title">TopBRec</span>
     </header>
-    <div class="container">
+    <section class="container" role="region">
       <form action="#" name="book-search" class="book-search" accept-charset="utf-8">
-        <label for='textSearch' >Book Search:</label>
+        <label for='textSearch'>Book Search:</label>
         <!-- name and id should match -->
         <input id="textSearch" name="user-input" placeholder="Enter Search Here" required/>
         <button type="submit" id="btnSearch" value="Search">Search</button>
@@ -47,7 +47,7 @@
         </select>
         <button type="submit" id="btn-change-genre" value="Change Genre">Change Genre</button>
       </form>
-    </div>
+    </section>
 
     <button class="trigger" data-iziModal-open="#modal-one">How to use</button>
 
@@ -58,7 +58,7 @@
       <h3>Escape or left or right arrow keys to leave instructions</h3>
     </div>
 
-    <main id="best-seller-titles">
+    <main id="best-seller-titles" role="main">
       <!-- Where we place loading screen -->
       <!-- best sellers -->
     </main>

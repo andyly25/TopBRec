@@ -22,7 +22,7 @@ function handleSubmit () {
 
 // When user clicks logo, bring back the home page
 function handleLogoPressed () {
-  $('header').on('click', '#nyt-logo', (event) => {
+  $('header').on('click', '#book-logo', (event) => {
     $('#best-seller-titles').empty();
     initPage();
   });
