@@ -72,12 +72,6 @@ button:hover{
   }
 }
 
-@media (hover: none) {
-  #book-logo:hover {
-    border: 1px solid black;
-  }
-}
-
 .hidden-content {
   display: none;
 }
