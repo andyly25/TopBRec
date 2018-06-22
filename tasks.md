@@ -17,6 +17,9 @@
   - should make lead to separate page for more info
 - Explain what the page is when someone lands on it
 - ACCESSIBILITY!
+- ~~modal~~
+- change logo/or title font 
+- site description: a way to remove or get out of face
 
 ## Bugs:
 - If we enter in a book, for example: goose girl
@@ -62,6 +65,3 @@
 - maybe add in number of search results as an option?
 
 
-- modal
-- change logo/or title font 
-- site description: a way to remove or get out of face

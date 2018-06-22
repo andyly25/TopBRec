@@ -17,8 +17,9 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.5.1/css/iziModal.min.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
   </head>
   <body>
     <header id="masthead">
@@ -29,7 +30,7 @@
       <form action="#" name="book-search" class="book-search" accept-charset="utf-8">
         <label for='textSearch' >Book Search:</label>
         <!-- name and id should match -->
-        <input id="textSearch" name="user-input" placeholder="Enter Search Here" require/>
+        <input id="textSearch" name="user-input" placeholder="Enter Search Here" required/>
         <button type="submit" id="btnSearch" value="Search">Search</button>
       </form>
       <!-- borrowed idea from 
@@ -45,8 +46,17 @@
         </select>
         <button type="submit" id="btn-change-genre" value="Change Genre">Change Genre</button>
       </form>
-
     </div>
+
+    <button class="trigger" data-iziModal-open="#modal-one">How to use</button>
+
+    <div id="modal-one" class="iziModal" data-izimodal-title="TopBRec Usage" data-izimodal-subtitle="Finding the right book!">
+      <h2>Type in a book title and receive some book recommendations above.</h2>
+      <h1>OR</h1>
+      <h2>Pick your genre and view the top latest New York Times books below!</h2>
+      <h3>Escape or left or right arrow keys to leave instructions</h3>
+    </div>
+
     <main id="best-seller-titles">
       <!-- Where we place loading screen -->
       <!-- best sellers -->
@@ -58,6 +68,7 @@
       integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
       crossorigin="anonymous">
     </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.5.1/js/iziModal.min.js"></script>
     <script type="text/javascript" src="js/config.js"></script>
     <script type="text/javascript" src="js/nytimesArchive.js"></script>
     <script type="text/javascript" src="js/store.js"></script>

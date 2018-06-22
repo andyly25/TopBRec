@@ -10,3 +10,6 @@ const TASTEDIVE_BOOKS_ENDPOINT = 'https://tastedive.com/api/similar';
 const API_DATA = {
   tastedive: null
 };
+
+// Open modal at start
+let openModal = 0;

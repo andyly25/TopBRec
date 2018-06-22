@@ -1,5 +1,10 @@
 // Starting off by initializing page with some of the popular fictions
 function initPage () {
+  if (openModal === 0) {
+    $('#modal-one').iziModal('open');
+    openModal = 1;
+  }
+
   $('#best-seller-titles').html(`
     <div class="loader-wrapper">
       <div class="loader"></div>
@@ -15,7 +20,7 @@ function initPage () {
 // updates the book listing on home page using nytimes
 function updateBestSellers (nytimesBestSellers) {
   $('#best-seller-titles').empty();
-  createAboutInfo();
+  // createAboutInfo();
   // by default NYT api returns 15 results, so I only want top 10
   nytimesBestSellers.results.books.slice(0, 10).forEach((book) => {
     const lastWeekRank = book.rank_last_week || 'n/a';
@@ -41,16 +46,16 @@ function updateBestSellers (nytimesBestSellers) {
   });
 }
 
-// Create intro to page so users will know what the site is about
-function createAboutInfo () {
-  $('#best-seller-titles').html(`
-      <section id="intro-jumbotron">
-        <h2>Type in a book title and receive some book recommendations above.</h2>
-        <h1>OR</h1>
-        <h2>Pick your genre and view the top latest New York Times books below!</h2>
-      </section>
-    `);
-}
+// // Create intro to page so users will know what the site is about
+// function createAboutInfo () {
+//   $('#best-seller-titles').html(`
+//       <section id="intro-jumbotron">
+//         <h2>Type in a book title and receive some book recommendations above.</h2>
+//         <h1>OR</h1>
+//         <h2>Pick your genre and view the top latest New York Times books below!</h2>
+//       </section>
+//     `);
+// }
 
 // borrowed from https://ihatetomatoes.net/create-custom-preloading-screen/
 function renderSpinner () {

@@ -21,6 +21,12 @@ main {
   justify-content: center;
 }
 
+button:hover{
+  background: #d5d5d5;
+  border: 1px solid black;
+  cursor:pointer;
+}
+
 .book-cover {
   display: block;
   margin: 0 auto;
@@ -116,6 +122,7 @@ main {
   padding: 0 10px;
   margin-right: 10px;
   border: 1px solid black;
+  cursor:pointer;
 }
 
 #masthead {
@@ -310,4 +317,28 @@ main {
   transition: all 0.3s 1s ease-out;
 }
 
-/* Let's edit layout here for now */
+/* modal css below */
+
+:focus { outline: 0;}
+
+.hide{
+  display: none;
+}
+
+.iziModal-header {
+  background: #000;
+}
+
+.trigger{
+  padding:10px 20px;
+  border-radius:3px;
+  border: 1px solid black;
+  background-color: #fff;
+  font-size:14px;
+  cursor:pointer;
+}
+.trigger:hover{
+  background:#d5d5d5;
+}
+
+
