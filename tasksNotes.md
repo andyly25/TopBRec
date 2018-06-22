@@ -1,4 +1,4 @@
-# Tasks:
+# Tasks/Notes:
 
 ## Features to add
 - add event listeners! 
@@ -17,17 +17,11 @@
   - should make lead to separate page for more info
 - Explain what the page is when someone lands on it
 - ACCESSIBILITY!
-- ~~modal~~
-- change logo/or title font 
-- site description: a way to remove or get out of face
+- ~~site description: a way to remove or get out of face~~
+  - ~~modal~~
+- ~~change logo/or title font~~
 
 ## Bugs:
-- If we enter in a book, for example: goose girl
-  - it gives mixed results
-  - wrong google book api search result
-  - correct, but doesn't match with Tastedive
-    - maybe use wiki api instead?...
-    - check out here https://www.mediawiki.org/wiki/API:Main_page
 - ~~If Search term not found, display error~~
 - ~~fix so each book has their own image~~
 - ~~**fix book search images so that they are in the right order**~~
@@ -35,8 +29,6 @@
   - entirely different results, changed to have + in between
 - ~~if thumbnail does not exist, replace with temporary image~~
 - ~~show-hide button not applied for all others, fix it later~~
-- should account for cases when certain terms not found
-  - example: author, imagelinks etc
 
 ## useful
 - ... useful to know
