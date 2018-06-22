@@ -23,7 +23,7 @@
   </head>
   <body>
     <header id="masthead">
-      <img src="https://github.com/birisora/TopBRec/blob/master/favicon/android-chrome-512x512.png?raw=true" height="80" id="book-logo">
+      <img src="https://github.com/birisora/TopBRec/blob/master/favicon/android-chrome-512x512.png?raw=true" height="80" id="book-logo" alt="Website logo image">
       <span id="title">TopBRec</span>
     </header>
     <div class="container">
@@ -36,7 +36,8 @@
       <!-- borrowed idea from 
           https://stackoverflow.com/questions/26528859/creating-a-text-and-dropdown-list-search-functionality -->
       <form action="#" id="genre-selection" name="genre-change">
-        <select id="select-genre">
+        <label for="select-genre">Select Genre:</label>
+        <select name="genre-selection" id="select-genre">
           <option selected value="hardcover-fiction">Top Fiction</option>
           <option value="hardcover-nonfiction">Top Nonfiction</option>
           <option value="young-adult-hardcover">Top Young-Adult</option>
