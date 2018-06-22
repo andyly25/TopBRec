@@ -327,9 +327,13 @@ button:hover{
   transition: all 0.3s 1s ease-out;
 }
 
-/* modal css below */
+/* ==========================================================================
+   Modal CSS from: http://izimodal.marcelodolce.com/
+   ========================================================================== */
 
-:focus { outline: 0;}
+:focus { 
+  outline: 0;
+}
 
 .hide{
   display: none;
