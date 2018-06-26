@@ -55,7 +55,7 @@ function errorMessage () {
       <p>Sorry, results were not found for this book using Tastedive api<p/>
       <p>Please try another book title</p>
       <label for="return-home"></label>
-      <input id="return-home" type="button" class="homeBtn" value="Return">
+      <input id="return-home" type="button" class="homeBtn basic-border" value="Return">
     </div>`);
 }
 
@@ -88,7 +88,7 @@ function displayUserSearchResult (books) {
       <h3 class="publisher">Published by: ${bookData.publisher}</h3>
       <h4 class="hidden-content book-desc">${description}</h4>
       <label for="show-hide-btn"></label>
-      <input type="button" id="show-hide-btn" class="show-hide" value="Show Description">
+      <input type="button" id="show-hide-btn" class="show-hide basic-border" value="Show Description">
       <p><a href="${book.wUrl}" target="_blank">Wikipedia Link</a></p>
     </div>
   `;

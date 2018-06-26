@@ -41,8 +41,8 @@ button:hover{
 }
 
 .entry {
-  margin: 30px 10px;
-  padding: 20px 50px;
+  margin: 20px 10px;
+  padding: 10px 50px;
   box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.21);
   text-align: left;
   width: 500px;
@@ -51,25 +51,19 @@ button:hover{
 .entry:before {
   content: attr(nyt-rank);
   font-family: 'Rozha One', serif;
-  font-size: 3rem;
+  font-size: 1.5rem;
   display: inline-block;
-  width: 50px;
-  height: 50px;
-  line-height: 50px;
-  padding: 20px 20px;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  padding: 10px 10px;
   text-align: center;
-  transform: translate(-100px);
+  transform: translate(-40px);
   border: 4px solid #282c37;
   background-color: #fff;
   border-radius: 50%;
   color: #282c37;
   box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.21);
-}
-
-@media screen and (max-width: 640px) {
-  .entry:before {
-    transform: translate(-40px);
-  }
 }
 
 .hidden-content {
@@ -117,7 +111,7 @@ button:hover{
 #book-logo:hover {
   padding: 0 10px;
   margin-right: 10px;
-  border: 1px solid black;
+  opacity: 0.5;
   cursor:pointer;
 }
 
@@ -140,7 +134,7 @@ button:hover{
   top: 0;
   left: 0;
   background: #FFF;
-  z-index: 9999;
+  z-index: 9998;
   width: 100%;
   padding: 10px;
   box-shadow: 0px 1px 5px 0px #777;
@@ -331,9 +325,9 @@ button:hover{
    Modal CSS from: http://izimodal.marcelodolce.com/
    ========================================================================== */
 
-:focus { 
+/* :focus { 
   outline: 0;
-}
+} */
 
 .hide{
   display: none;
@@ -351,9 +345,30 @@ button:hover{
   background-color: #fff;
   font-size:14px;
   cursor:pointer;
+
 }
 .trigger:hover{
   background:#d5d5d5;
 }
 
 
+/* ==========================================================================
+  For smaller/mobile screens
+  1040px and smaller for the ipad pro and smaller
+   ========================================================================== */
+@media screen and (max-width: 1040px) {
+  .basic-border {
+    width: 100%;
+    border: 1px solid black;
+  }
+  .entry:before {
+    transform: translate(-40px);
+  }
+  #topBtn:not(:focus):hover {
+    background: white;
+    color: black;
+  }
+  #book-logo:hover{
+    opacity: 1;
+  }
+}

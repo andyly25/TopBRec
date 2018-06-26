@@ -8,7 +8,6 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <!-- temporary favicon of a character I made -->
     <link rel="apple-touch-icon" sizes="120x120" href="favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
@@ -31,14 +30,14 @@
     <section class="container" role="region">
       <form action="#" name="book-search" class="book-search" accept-charset="utf-8">
         <label for='textSearch'>Book Search:</label>
-        <input id="textSearch" name="user-input" placeholder="Enter Search Here" required/>
-        <button type="submit" id="btnSearch" value="Search">Search</button>
+        <input id="textSearch" class="basic-border" name="user-input" placeholder="Enter Search Here" required/>
+        <button type="submit" id="btnSearch" class="basic-border" value="Search">Search</button>
       </form>
       <!-- borrowed idea from 
           https://stackoverflow.com/questions/26528859/creating-a-text-and-dropdown-list-search-functionality -->
       <form action="#" id="genre-selection" name="genre-change">
         <label for="select-genre">Select Genre:</label>
-        <select name="genre-selection" id="select-genre" aria-controls="genre-selection">
+        <select name="genre-selection" id="select-genre" class="basic-border" aria-controls="genre-selection">
           <option selected value="hardcover-fiction">Top Fiction</option>
           <option value="hardcover-nonfiction">Top Nonfiction</option>
           <option value="young-adult-hardcover">Top Young-Adult</option>
@@ -46,18 +45,18 @@
           <option value="sports">Top Sports and Fitness</option>
           <option value="science">Top Science</option>
         </select>
-        <button type="submit" id="btn-change-genre" value="Change Genre">Change Genre</button>
+        <button type="submit" id="btn-change-genre" class="basic-border" value="Change Genre">Change Genre</button>
       </form>
       <!-- button to open up modal for instructions -->
       <button class="trigger" data-iziModal-open="#modal-one">How to use</button>
     </section>
     
-    <!-- a modal that appears if buton is pressed -->
+    <!-- a modal that appears if button is pressed, used to describe usage of site -->
     <div id="modal-one" class="iziModal" data-izimodal-title="TopBRec Usage" data-izimodal-subtitle="Top Book Recommendations" aria-live="assertive" role="region">
       <h2>Type in a book title and receive some book recommendations above.</h2>
       <h1>OR</h1>
       <h2>Pick your genre and view the top latest New York Times books below!</h2>
-      <h3>Escape or left or right arrow keys to leave instructions</h3>
+      <h3>'esc', 'left' or 'right' arrow keys, or click 'x' top right to leave instructions</h3>
     </div>
 
     <main id="best-seller-titles" role="main" aria-live="assertive">

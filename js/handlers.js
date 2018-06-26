@@ -52,6 +52,7 @@ function handleHomeBtnPressed () {
   });
 }
 
+// Handles the show and hide description of book results
 function handleShowHide () {
   // https://coderwall.com/p/wxjljq/jquery-find-and-closest-are-your-best-friends
   $('main').on('click', '.show-hide', (event) => {
@@ -76,12 +77,15 @@ $(document).on('click', '#topBtn', () => {
   $('HTML, BODY').animate({ scrollTop: 0 }, 1000);
 });
 
+// this uses IziModal to display the site's instructions
 function handleIziModal () {
   $('.iziModal').iziModal({
     width: 700,
     radius: 5,
     padding: 20,
     group: 'products',
-    loop: true
+    loop: true,
+    zindex: 9999,
+    top: 100
   });
 }
