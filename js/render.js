@@ -63,7 +63,6 @@ function errorMessage () {
 function displayUserSearchResult (books) {
   $('#best-seller-titles').html(books.map((book) => {
     const bookData = book.items[0].volumeInfo;
-    console.log(bookData);
     const placeHolderImg = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/387928/book%20placeholder.png';
     const thumbnail = bookData.imageLinks !== undefined
       ? bookData.imageLinks.thumbnail
