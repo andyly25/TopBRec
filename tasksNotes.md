@@ -52,3 +52,13 @@
 - maybe add in number of search results as an option?
 
 
+## Future feedback
+Design (optional): I recommend sourcing your design in current best practice. A very easy way to start is to use materialize.css as a reference. It's based upon Google's material design principles and gives visual examples of forms, components and entire themes. You can of course use it to build your application user interface as well; it's just a simple link or two and it's free. But at a minimum it might be good to use it as design inspiration. While there are many other places to go for design inspiration, materialize.css is a great first step in building the design acumen that any developer needs.
+
+Responsive CSS Implementation (required): Responsive design must be mobile-first. The CSS that comes first should be for mobile widths and the CSS that is in media queries should incrementally override mobile rules and properties as needed to take advantage of greater screen real estate. Whenever you find yourself using max-width in media queries, you may be doing a desktop-first implementation which is reverse of best practice.
+
+Example: / Mobile CSS /
+
+/ Tablet breakpoint / @media all and (min-width: 640px) { /* Override only properties needed for tablet }
+
+/ Desktop breakpoint / @media all and (min-width: 1024px) { /* Override only properties needed for Desktop }
